@@ -1,0 +1,54 @@
+@import "base";
+
+.MainHeader{
+    $mainH: 50px;
+    height: 50px;
+    display: flex;
+    border-bottom: 1px solid $gray5;
+    > div {
+        flex: 1;
+        position: relative;
+        a{
+            position: absolute;
+        }
+        &:first-child{
+            a{
+                $h: 14px;
+                $w: 55px;
+                @include size($w, 100%);
+                left: $defaultMarginsLeftRight;
+                top: 0;
+                background-image: url("../img/logo.svg");
+                background-position: center calc(50% - 2px);
+                background-repeat: no-repeat;
+                background-size: 100%;
+                text-indent: -9999px;
+            }
+        }
+        &:last-child{
+            a{
+                display: block;
+                @include size(58px, 100%);
+                right: $defaultMarginsLeftRight;
+                top: 0;
+                padding: 0 20px;
+            }
+            hr{
+                width: 100%;
+                $h: 1px;
+                $m: 3px;
+                margin: 0;
+                display: block; 
+                content: ""; 
+                border-style: solid; 
+                border-color: $defaultFontColor; 
+                border-width: $h; 
+                border-radius: $h/2;
+                margin-top: 3px;
+                &:first-child{
+                    margin-top: ($mainH - ((($h+1) * 3) + (3px * 3))) / 2;
+                }
+            }
+        }
+    }
+}

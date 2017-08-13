@@ -1,0 +1,23 @@
+@import "base";
+
+.MainServiceItem{
+    border-top: 1px solid red;
+    height: 15%;
+    display: block;
+    &.item_symptom{
+        background-color: $symptomColor;
+        border-color: lighten($symptomColor, 10%);
+    }
+    &.item_event{
+        background-color: $eventColor;
+        border-color: lighten($eventColor, 10%);
+    }
+    &.item_sleep{
+        background-color: $sleepColor;
+        border-color: lighten($sleepColor, 10%);
+    }
+    &.item_excercise{
+        background-color: $excerciseColor;
+        border-color: lighten($excerciseColor, 10%);
+    }
+}

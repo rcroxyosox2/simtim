@@ -1,0 +1,53 @@
+// -------------------------------------------
+// Mixins
+// -------------------------------------------
+
+@mixin size($w, $h) {
+    width: $w;
+    height: $h;
+}
+
+@mixin sq($s) {
+    @include size($s, $s);
+}
+
+
+// -------------------------------------------
+// Fonts
+// -------------------------------------------
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+$defaultFont: 'Open Sans', sans-serif;
+
+
+// -------------------------------------------
+// Colors 
+// -------------------------------------------
+
+$gray1: #FFF;
+$gray2: #E4E8E8;
+$gray4: #384240;
+$gray5: #1F2423;
+
+$maroon3: #A36F8A;
+$pink3: #B995B8;
+$teal3: #749CA4;
+$green3: #9CC2AF;
+
+// -------------------------------------------
+// Application
+// -------------------------------------------
+
+$defaultFontColor: $gray2;
+$appBackgroundColor: $gray4;
+
+$symptomColor: $maroon3; 
+$eventColor: $pink3;
+$sleepColor: $teal3;
+$excerciseColor: $green3;
+
+// -------------------------------------------
+// Sizes
+// -------------------------------------------
+
+$defaultMarginsLeftRight: 45px;
