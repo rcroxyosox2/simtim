@@ -5,6 +5,7 @@ var DEV = path.resolve(__dirname, 'dev');
 var OUTPUT = path.resolve(__dirname, 'output');
 
 var config = {
+    devtool: 'source-map',
     entry: DEV + '/index.jsx',
     output: {
         path: OUTPUT,

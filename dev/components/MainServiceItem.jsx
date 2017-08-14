@@ -7,7 +7,7 @@ class MainServiceItem extends React.Component{
         const itemClassName = "item_" + this.props.name.toLowerCase();
 
         return (
-            <div className={"MainServiceItem " + itemClassName}>{this.props.name}</div>
+            <div className={"MainServiceItem " + itemClassName}>{this.props.name} {this.props.children}</div>
         );
     }
 }
