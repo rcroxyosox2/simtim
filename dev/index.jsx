@@ -7,6 +7,7 @@ import sanitize from 'sanitize.scss/_sanitize.scss';
 import Styles from './scss/app.scss';
 import {
 Switch,
+Redirect,
 HashRouter,
 Route,
 Link
@@ -24,26 +25,27 @@ export default class Index extends React.Component {
         const fire = this.fire = firebaseInit();
         const db = this.db = fire.database(); //the real-time database
         const auth = this.auth = fire.auth(); //the firebase auth namespace
-        var user = auth.currentUser;
+        var user = this.user = auth.currentUser;
 
         this.state = {
             user: auth.currentUser,
             loading: true
         }
+    }
 
+    componentDidMount() {
         this.auth.onAuthStateChanged((user) => {
             this.setState({user: user, loading: false});
-            if (user) {
+            if (this.user) {
                 // User is signed in.
-                // console.log("onAuthStateChanged: user is logged in", user.providerData);
+                // console.log("onAuthStateChanged: user is logged in", user.providerData, user.currentUser);
             } else {
                 // No user is signed in.
                 // console.log("onAuthStateChanged: user is logged out", user);
             }
         });
-
-
     }
+
     render() {
 
         // TODO: make generic
@@ -51,10 +53,20 @@ export default class Index extends React.Component {
 
         let app = (
             <div className="Index">
-                <Route exact path="/" component={Home}></Route>
-                <Route exact path="/symptom" component={Home}></Route>
-                <Route exact path="/symptom/list" component={Home}></Route>
-                <Route path="/settings" render={()=><Settings num="2" auth={this.auth}/>}></Route>
+                <Switch>
+                    <Route exact path="/" render={
+                        (props) => { return <Home fire={this.fire} {...props} />; }
+                    }></Route>
+                    <Route exact path="/symptom" render={
+                        (props) => { return <Redirect to="/symptom/add" />; }
+                    }></Route>
+                    <Route exact path="/*/add" render={
+                        (props) => {return <Home fire={this.fire} {...props} />; }
+                    }></Route>
+                    <Route exact path="/settings" render={
+                        (props) => {return <Settings num="2" auth={this.auth} fire={this.fire} {...props} />; }
+                    }></Route>
+                </Switch>
             </div>
         )
 

@@ -1,8 +1,18 @@
 @import "base";
-
+@import '../../lib/chartist/overrides.scss';
+@import '../../lib/chartist/chartist.scss';
 
 .LineGraph{
-    display: block;
-    height: 20%;
-    border: 1px solid red;
+    flex: 4;
+    overflow: hidden;
+    @include transition($homeServicesExpand);
+    position: relative;
+    .open #mainContent &{
+        flex: 0;
+    }
+    .ct-chart{
+        position: absolute;
+        @include sq(100%);
+        overflow: hidden;
+    }
 }
