@@ -1,0 +1,34 @@
+@import "base";
+
+.HomeLineGraphToggleSettings{
+    @include transition($homeServicesExpand);
+    position: relative;
+    box-sizing: border-box;
+    padding: 0 $defaultMarginsLeftRight $defaultMarginsLeftRight;
+    .chartMode #mainContent &{
+        overflow: initial;
+    }
+
+    &.chart-enter {
+        opacity: 0.01;
+        top: $exmpandedChartSize;
+        // max-height: 0;
+    }
+
+    &.chart-enter.chart-enter-active {
+        opacity: 1;
+        top: 0;
+        transition-delay: 100ms;
+    }
+
+    &.chart-leave {
+        opacity: 1;
+        top: $exmpandedChartSize;
+    }
+
+    &.chart-leave.chart-leave-active {
+        opacity: 0.01;
+        top: $exmpandedChartSize + 100;
+        // transition: all 5000ms ease-in;
+    }
+}

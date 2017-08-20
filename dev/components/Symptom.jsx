@@ -1,10 +1,14 @@
 import React from 'react';
-import Style from '../scss/Symptom.scss';
+import SymptomList from './SymptomList.jsx';
+import SymptomAdd from './SymptomAdd.jsx';
 
 class Symptom extends React.Component{
     render(){
         return (
-            <div className="Symptom">Hello, Im the Symptom component.</div>
+            <div className="Symptom">
+                <SymptomList {...this.props} />
+                <SymptomAdd {...this.props} />
+            </div>
         );
     }
 }

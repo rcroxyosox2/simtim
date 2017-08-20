@@ -17,6 +17,7 @@
     "compass-mixins": "^0.12.10",
     "css-loader": "^0.28.4",
     "firebase": "^4.2.0",
+    "moment": "^2.18.1",
     "node-sass": "^4.5.3",
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",

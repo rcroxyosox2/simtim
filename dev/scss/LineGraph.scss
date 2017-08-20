@@ -3,16 +3,40 @@
 @import '../../lib/chartist/chartist.scss';
 
 .LineGraph{
-    flex: 4;
-    overflow: hidden;
-    @include transition($homeServicesExpand);
-    position: relative;
-    .open #mainContent &{
-        flex: 0;
-    }
     .ct-chart{
         position: absolute;
         @include sq(100%);
         overflow: hidden;
+        // padding: $defaultMarginsLeftRight;
+    }
+    .ct-labels{
+        foreignObject{
+
+            // &:not(:first-child):not(:last-child) {
+            //     > * {
+            //         text-align: center;
+            //         display: block;
+            //         margin-left: -50%;
+            //     }
+            // }
+
+            // &:not(:first-child):not(:last-child) {
+            //     > * {
+            //         text-align: center;
+            //         display: block;
+            //         margin-left: -50%;
+            //     }
+            // }
+
+            // &:last-child{
+            //     > * {
+            //         white-space: nowrap;
+            //         text-align: right;
+            //         width: 100% !important;
+            //         position: relative;
+            //         left: calc(-100% - 5px);
+            //     }
+            // }
+        }
     }
 }

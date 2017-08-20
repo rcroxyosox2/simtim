@@ -6,18 +6,44 @@
     display: flex;
     flex-direction: column;
     position: absolute;
+    
     #mainContent{
         flex-direction: column;
         display: flex;
         flex-basis: calc(100% - #{$mainHeaderHeight});
+        background: $gray4;
         @include transition($homeServicesExpand);
     }
-    &.open{
+
+    .homeLineGraphContainer{
+        flex: 3;
+        @include transition($homeServicesExpand);
+        position: relative;
+        overflow: scroll;
+        > * {
+            // border: 1px solid red;
+        }
+        .transitioningContent{
+            position: relative;
+            top: 0;
+        }
+    }
+
+
+    &.addMode{
         #mainContent {
             flex-basis: 100%;
         }
     }
-    
+
+    &.chartMode{
+        .homeLineGraphContainer{
+            .transitioningContent{
+                top: 200px;
+            }
+        }
+    }
+
     .services-enter {
         opacity: 0.01;
     }
@@ -33,6 +59,6 @@
 
     .services-leave.services-leave-active {
         opacity: 0.01;
-        transition: opacity 300ms ease-in;
+        transition: all 300ms ease-in;
     }
 }

@@ -5,6 +5,7 @@ import Home from './components/Home.jsx';
 import Settings from './components/Settings.jsx';
 import sanitize from 'sanitize.scss/_sanitize.scss';
 import Styles from './scss/app.scss';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import {
 Switch,
 Redirect,
@@ -50,28 +51,50 @@ export default class Index extends React.Component {
 
         // TODO: make generic
         const appLoadingState = <div>Laoding....</div>;
-
+        const SETTINGS_MODE = "settingsMode";
         let app = (
-            <div className="Index">
-                <Switch>
-                    <Route exact path="/" render={
-                        (props) => { return <Home fire={this.fire} {...props} />; }
-                    }></Route>
-                    <Route exact path="/symptom" render={
-                        (props) => { return <Redirect to="/symptom/add" />; }
-                    }></Route>
-                    <Route exact path="/*/add" render={
-                        (props) => {return <Home fire={this.fire} {...props} />; }
-                    }></Route>
-                    <Route exact path="/settings" render={
-                        (props) => {return <Settings num="2" auth={this.auth} fire={this.fire} {...props} />; }
-                    }></Route>
-                </Switch>
-            </div>
+            <Route children={(match)=>{
+
+                let className = "Index";
+                let showSettings = false;
+                if (match.location.pathname.substring(1) === "settings") { 
+                    className += ` ${SETTINGS_MODE}`;
+                    showSettings = true;
+                }
+
+                return (
+                <div className={className}>
+                    <Switch>
+                        <Route exact path="/" render={
+                            (props) => { return <Home fire={this.fire} {...props} />; }
+                        }></Route>
+                        <Route exact path="/chart" render={
+                            (props) => { return <Home fire={this.fire} {...props} />; }
+                        }></Route>
+                        <Route exact path="/symptom" render={
+                            (props) => { return <Redirect to="/symptom/add" />; }
+                        }></Route>
+                        <Route exact path="/*/add" render={
+                            (props) => {return <Home fire={this.fire} {...props} />; }
+                        }></Route>
+                        <Route exact path="/settings" render={
+                            (props) => {return <Home fire={this.fire} {...props} />; }
+                        }></Route>
+                    </Switch>
+                    <CSSTransitionGroup transitionName="settings" 
+                        className="transitioningContentSettings"
+                        component="div"
+                        transitionEnterTimeout={300}
+                        transitionLeaveTimeout={300}
+                    >
+                        {showSettings && <Settings {...this.props} auth={this.auth} key="1" />}
+                    </CSSTransitionGroup>
+                </div>);
+            }}></Route>
         )
 
         if (!this.state.user) {
-            app = <div><LoginForm auth={this.auth} fire={this.fire} /></div>;
+            app = <div className="Index"><LoginForm auth={this.auth} fire={this.fire} /></div>;
         }
 
         return (this.state.loading) ? appLoadingState : app;

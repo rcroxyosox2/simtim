@@ -2,9 +2,16 @@ import React from 'react';
 import Style from '../scss/LineGraph.scss';
 import ChartistGraph from 'react-chartist';
 
+
 class LineGraph extends React.Component{
 
+    click(e) {
+        this.props.history.push("/chart");
+    }
+
     render(){
+
+        const MAIN_MARGINS = 45;
 
         if (this.props.delayRedraw) {
 
@@ -17,62 +24,72 @@ class LineGraph extends React.Component{
             interval = setInterval(() => {
                 var evt = new UIEvent('resize'); 
                 window.dispatchEvent(evt);
-                console.log("going");
             }, 10);
         }
 
+
         const data = {
-            labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
-            series: [
-                [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
-            ]
+            labels: this.props.labels,
+            series: [ this.props.data ]
         };
 
         const options = {
-            high: 10,
-            low: -10,
+            // high: 10,
+            // low: -10,
             fullWidth: true,
-            showLabel: false,
             showPoint: false,
             chartPadding:{
-                top: 0,
-                right: 5,
-                bottom: 0,
-                left: -34
+                top: MAIN_MARGINS / 2,
+                right: (5 + MAIN_MARGINS),
+                bottom: MAIN_MARGINS + 5,
+                left: (MAIN_MARGINS)
             },
             axisY: {
                 showGrid: false,
-                showLabel: false
+                showLabel: false,
+                offset: 0
             },
             axisX: {
+                stretch: 'middle',
                 showGrid: false,
-                labelInterpolationFnc: function(value, index) {
-                    return index % 2 === 0 ? value : null;
+                labelOffset: {
+                    y: 20
                 }
-            }
-        };
-
-        const type = 'Line'
-
-        const listener = {
-            draw: (data) => {
-                // console.log(data.type);
-
-                // remove the dots
-                // if (data.type == "point"){
-                //     data.element.attr({
-                //         style: 'stroke-width: 0;'
-                //     });
+                // labelInterpolationFnc: function(value, index) {
+                //     return index % 2 === 0 ? value : null;
                 // }
             }
         };
 
+        const type = 'Line'
+        let bigW;
+        const listener = {
+            draw: (data) => {
+                // If the draw event was triggered from drawing a point on the line chart
+                if(data.type === 'label') {
+                    if (data.width > bigW) {
+                        bigW = data.width;
+                    }
+
+                    let newW = (bigW) ? bigW : data.width;
+                    data.element.attr({ width: newW });
+                    data.element.getNode().firstChild.style.width = `${newW}px`;
+                    bigW = data.width;
+                }
+            }
+        };
+
+        const className = `LineGraph ${this.props.className}`
         return (
-            <div className="LineGraph" onClick={o => this.click.bind(this)}>
+            <div className={className} onClick={this.click.bind(this)}>
                 <ChartistGraph data={data} options={options} type={type} listener={listener} ref={chart => this.chart = chart} />
             </div>
         );
     }
+}
+
+LineGraph.defaultProps = {
+    className: ""
 }
 
 export default LineGraph;

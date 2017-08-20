@@ -1,30 +1,37 @@
 @import "base";
 
 .MainServiceItem{
+    $linkHeight: 80px;
     border-top: 1px solid red;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: scroll;
     position: relative;
+    
     @include transition($homeServicesExpand);
     @include box-shadow(0 35px 75px 10px rgba(0,0,0,0.5));
+
     &.item_symptom{
         background-color: $symptomColor;
         border-color: lighten($symptomColor, 10%);
     }
+
     &.item_event{
         background-color: $eventColor;
         border-color: lighten($eventColor, 10%);
     }
+
     &.item_sleep{
         background-color: $sleepColor;
         border-color: lighten($sleepColor, 10%);
     }
+
     &.item_excercise{
         background-color: $excerciseColor;
         border-color: lighten($excerciseColor, 10%);
     }
+
     > a{
         position: absolute;
         @include sq(100%);
@@ -32,23 +39,31 @@
         @include transition($homeServicesExpand);
         flex: 1;
     }
+
     > .transitioningContent{
         flex: 5;
+        margin-top: $linkHeight;
     }
+
     &.active{
         flex-basis: 100%;
         > a{
-            height: 80px;
+            height: $linkHeight;
         }
     }
+
     &.hidden{
         flex: 0;
     }
 
-    .open #mainContent &{
+    .addMode #mainContent &{
         &:not(.active) {
             flex: 0;
             flex-basis: 20px;
         }
+    }
+
+    .chartMode #mainContent &{
+        flex: 0;
     }
 }

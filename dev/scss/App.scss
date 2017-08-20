@@ -10,3 +10,28 @@ body{
 a{
     color: $teal3;
 }
+
+input, textarea {
+    border: 1px solid red;
+}
+
+.Index{
+    .Home{
+        @include transition($homeServicesExpand);
+        z-index: 2;
+    }
+    .transitioningContentSettings{
+        position: absolute;
+        z-index: 1;
+        @include sq(100%);
+    }
+    &.settingsMode{
+        .Home{
+            @include transform(scale(0.8) translateX(-99%));
+            @include box-shadow(0 35px 75px 10px rgba(0,0,0,0.5));
+        }
+        .MainServiceItem{
+            @include box-shadow(none);
+        }
+    }  
+}

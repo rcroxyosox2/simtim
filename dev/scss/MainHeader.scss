@@ -5,8 +5,9 @@
     display: flex;
     border-bottom: 1px solid $gray5;
     overflow: hidden;
+    background: $gray4;
     @include transition($homeServicesExpand);
-    .open &{
+    .addMode &{
         flex-basis:  0;
     }
     > div {

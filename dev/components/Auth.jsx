@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import SplashScreen from './SplashScreen.jsx';
 import Style from '../scss/Auth.scss';
 
 class EmailField extends React.Component{ 
@@ -79,12 +80,17 @@ class LoginForm extends React.Component {
             }
         }
 
-        return (<div className="Auth LoginForm">
-            <LoadingMessage loading={this.state.loading} />
-            <EmailField ref={ field => { this.emailField = field;}} />
-            <PasswordField ref={field => {this.pwField = field} } />
-            <button ref={o => {this.x = o} } onClick={this.login.bind(this)}>Log In</button>
-        </div>);
+        return (
+            <div className="Auth LoginForm">
+                <div className="mainContent">
+                    <LoadingMessage loading={this.state.loading} />
+                    <EmailField ref={ field => { this.emailField = field;}} />
+                    <PasswordField ref={field => {this.pwField = field} } />
+                    <button ref={o => {this.x = o} } onClick={this.login.bind(this)}>Log In</button>
+                </div>
+                <SplashScreen />
+            </div>
+        );
     }
 }
 

@@ -1,0 +1,50 @@
+@import "base";
+
+.SplashScreen{
+    @include sq(100%);
+    position: absolute;
+    #clouds1, #clouds2{
+        backrgound-size: 100%;
+        background-repeat: no-repeat;
+        position: absolute;
+        background-image: url("../img/clouds2.svg");
+        @include box-shadow(0 10px 20px -10px rgba(0,0,0,0.1));
+    }
+    #clouds1{
+        @include transition(all 150000ms linear);
+        background-image: url("../img/clouds.svg");
+        @include size(205px, 62px);
+        left: -20%;
+        top: 51%;
+    }
+    #clouds2{
+        @include transition(all 190000ms linear);
+        right: -20%;
+        top: 71%;
+        @include size(129px, 38px);
+    }
+    .mountainContainer{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        @include sq(100%);
+        @include transition(all 10000ms ease-in-out);
+        @include transform(translateY(5%));
+        background-image: url("../img/mountains.svg");
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center bottom;
+    }
+    
+    &.loaded {
+        #clouds1{
+            @include transform(translateX(400%));
+        }
+        #clouds2{
+           @include transform(translateX(-400%));
+        }
+        .mountainContainer{
+            @include transform(translateY(0%));
+        }
+    }
+}

@@ -7,7 +7,9 @@ class Settings extends React.Component{
 
     render(){
         return (
-            <LogoutLink auth={this.props.auth} />
+            <div className="Settings">
+                <LogoutLink auth={this.props.auth} />
+            </div>
         );
     }
 }

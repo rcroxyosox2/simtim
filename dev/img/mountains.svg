@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="375px" height="358px" viewBox="0 0 375 358" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.1 (44463) - http://www.bohemiancoding.com/sketch -->
+    <title>bottom design</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone-7-Copy-11" transform="translate(0.000000, -309.000000)">
+            <g id="bottom-design" transform="translate(-280.000000, 282.000000)">
+                <rect id="Rectangle-9" fill="#A36F8A" opacity="0.496560168" transform="translate(536.783838, 395.783838) rotate(-45.000000) translate(-536.783838, -395.783838) " x="312.783838" y="171.783838" width="448" height="448" rx="82"></rect>
+                <rect id="Rectangle-9" fill="#A36F8A" opacity="0.806319963" transform="translate(457.783838, 443.783838) rotate(-45.000000) translate(-457.783838, -443.783838) " x="305.832305" y="291.832305" width="303.903066" height="303.903066" rx="33"></rect>
+                <polygon id="Rectangle-4-Copy" fill="#E4E8E8" opacity="0.179279384" points="549 109 574 109 574 282 549 307"></polygon>
+                <path d="M189.460155,107.460155 L544.323683,107.460155 L544.323683,107.460155 C589.611032,107.460155 626.323683,144.172806 626.323683,189.460155 L626.323683,374.822943 L626.323683,544.323683 L626.323683,544.323683 C626.323683,589.611032 589.611032,626.323683 544.323683,626.323683 L189.460155,626.323683 L189.460155,626.323683 C144.172806,626.323683 107.460155,589.611032 107.460155,544.323683 L107.460155,189.460155 L107.460155,189.460155 C107.460155,144.172806 144.172806,107.460155 189.460155,107.460155 Z" id="Rectangle-9-Copy" fill="#B995B8" opacity="0.496560168" transform="translate(366.891919, 366.891919) rotate(-45.000000) translate(-366.891919, -366.891919) "></path>
+                <polygon id="Rectangle-4" fill="#E4E8E8" opacity="0.179279384" points="406 27 424 27 424 191 406 209"></polygon>
+                <path d="M248,276.366524 C349.433052,276.366524 356.119981,168.177541 415.794231,168.177541 C475.468481,168.177541 471.635729,257.403499 528.44953,257.403499 C585.26333,257.403499 620.862128,123.846844 674,123" id="Path-2" stroke="#A36F8A" stroke-width="3"></path>
+                <rect id="Rectangle-9-Copy-2" fill="#749CA4" opacity="0.496560168" transform="translate(654.783838, 517.783838) rotate(-45.000000) translate(-654.783838, -517.783838) " x="430.783838" y="293.783838" width="448" height="448" rx="92"></rect>
+                <rect id="Rectangle-9-Copy-3" fill="#9CC2AF" opacity="0.634036847" transform="translate(327.783838, 468.783838) rotate(-45.000000) translate(-327.783838, -468.783838) " x="103.783838" y="244.783838" width="448" height="448" rx="92"></rect>
+                <polygon id="Rectangle-4-Copy-2" fill="#E4E8E8" opacity="0.179279384" points="468 292 468 479 435 479 435 260"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

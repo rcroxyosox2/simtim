@@ -30,7 +30,7 @@
         cursor: pointer;
         border: 4px solid transparent;
         &:focus, &:hover{
-            border-color: lighten($maroon3, 43%);
+            background-color: lighten($teal3, 40%);
         }
         &:active{
             top: 1px;
@@ -38,4 +38,9 @@
         }
     }
 
+    .mainContent{
+        @include sq(100%);
+        position: absolute;
+        z-index: 2;
+    }
 }
