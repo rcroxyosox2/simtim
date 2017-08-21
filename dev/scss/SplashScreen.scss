@@ -1,34 +1,79 @@
 @import "base";
 
+@include keyframes(cloud) {
+    from{
+        opacity: 1;
+        @include transform(translateX(0%));
+    }
+    to{
+        opacity: 0.1;
+        @include transform(translateX(300%));
+    }
+}
+
+@include keyframes(cloudRight) {
+    from{
+        opacity: 1;
+        @include transform(translateX(0%));
+    }
+    to{
+        opacity: 0.1;
+        @include transform(translateX(-350%));
+    }
+}
+
 .SplashScreen{
     @include sq(100%);
     position: absolute;
-    #clouds1, #clouds2{
+    .clouds1, .clouds2{
         backrgound-size: 100%;
         background-repeat: no-repeat;
         position: absolute;
-        background-image: url("../img/clouds2.svg");
         @include box-shadow(0 10px 20px -10px rgba(0,0,0,0.1));
     }
-    #clouds1{
-        @include transition(all 150000ms linear);
+
+    $animationTime: 60000ms;
+    $animationTimeSlow: $animationTime - ($animationTime * .2);
+
+    .cloudBlur{
+        $w: 200px;
+        @include size($w, 25px);
+        @include border-radius($w/2);
+        @include filter(blur(35px));
+        position: absolute;
+        left: -60%;
+        top: 15%;
+        background-color: $eventColor;
+        @include animation(cloud $animationTime linear 0s infinite);
+    }
+    .clouds1{
+        @include animation(cloud $animationTime linear 0s infinite);
         background-image: url("../img/clouds.svg");
         @include size(205px, 62px);
-        left: -20%;
+        left: -65%;
         top: 51%;
     }
-    #clouds2{
-        @include transition(all 190000ms linear);
-        right: -20%;
+
+    .clouds2{
+        @include animation(cloudRight $animationTimeSlow linear 0s infinite);
+        background-image: url("../img/clouds2.svg");
+        right: -40%;
         top: 71%;
         @include size(129px, 38px);
+    }
+
+    #tagLine{
+        position: absolute;
+        left: $defaultMarginsLeftRight;
+        bottom: $defaultMarginsLeftRight / 2;
+        font-family: $logoFont;
     }
     .mountainContainer{
         position: absolute;
         left: 0;
         bottom: 0;
         @include sq(100%);
-        @include transition(all 10000ms ease-in-out);
+        @include transition(all 10000ms linear);
         @include transform(translateY(5%));
         background-image: url("../img/mountains.svg");
         background-size: 100%;
@@ -37,12 +82,6 @@
     }
     
     &.loaded {
-        #clouds1{
-            @include transform(translateX(400%));
-        }
-        #clouds2{
-           @include transform(translateX(-400%));
-        }
         .mountainContainer{
             @include transform(translateY(0%));
         }

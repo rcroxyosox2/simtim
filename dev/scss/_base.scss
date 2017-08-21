@@ -13,6 +13,37 @@
     @include size($s, $s);
 }
 
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
 
 // -------------------------------------------
 // Fonts
@@ -20,7 +51,7 @@
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 $defaultFont: 'Open Sans', sans-serif;
-
+$logoFont: 'Georgia', serif;
 
 // -------------------------------------------
 // Colors 
@@ -33,6 +64,7 @@ $gray5: #1F2423;
 
 $maroon3: #A36F8A;
 $pink3: #B995B8;
+$hotpink4: #E8248A;
 $teal3: #749CA4;
 $green3: #9CC2AF;
 
@@ -50,7 +82,8 @@ $sleepColor: $teal3;
 $excerciseColor: $green3;
 
 $inputColors: $teal3;
-
+$linkColor: $teal3;
+$errorColor: $hotpink4;
 
 // -------------------------------------------
 // Sizes

@@ -2,6 +2,8 @@ import React from 'react';
 import Style from '../scss/HomeLineGraph.scss';
 import LineGraph from './LineGraph.jsx';
 import moment from 'moment';
+import {getConsolidatedDataValuesByDate} from './Helpers.jsx';
+
 
 class HomeLineGraph extends React.Component{
 
@@ -16,23 +18,28 @@ class HomeLineGraph extends React.Component{
     componentDidMount() {
         const db = this.props.fire.database();
         const auth = this.props.fire.auth();
-        let symptomsRef = db.ref("/u001/symptoms"); // TODO: convert u001 to userid 
+        let symptomsRef = db.ref("/u001/symptoms").orderByChild('date'); // TODO: convert u001 to userid 
         symptomsRef.on('value', (snap) => {
-            this.setState({loading: false, symptoms: snap.val()});
+            this.setState({loading: false, symptoms: snap});
         });  
     }
 
     render(){
 
-        const symptoms = this.state.symptoms;
+        let symptoms = {};
+        this.state.symptoms.forEach && this.state.symptoms.forEach(item => {
+            symptoms[item.key] = item.val();
+        });
+
+        let consolidated = getConsolidatedDataValuesByDate({data: symptoms, keyString: "severity"});
+
         let labels = [];
         let data = [];
 
-        for(let id in symptoms) {
-            let symptom = symptoms[id];
-            labels.push(moment(symptom.date).format("MMM YY"));
-            data.push(symptom.severity);
-        }
+        consolidated.forEach(item => {
+            labels.push(item.label);
+            data.push(item.data);
+        });
 
         return (
             <div className="HomeLineGraph">

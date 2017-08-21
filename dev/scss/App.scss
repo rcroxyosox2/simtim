@@ -8,11 +8,20 @@ body{
 }
 
 a{
-    color: $teal3;
+    color: $linkColor;
+    text-decoration: none;
+    &:hover{
+        text-decoration: underline;
+    }
 }
 
-input, textarea {
-    border: 1px solid red;
+.errorMessage{
+    color: $errorColor;
+    font-family: $logoFont;
+    font-size: 13px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0 40px 0 0px;
 }
 
 .Index{

@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SplashScreen from './SplashScreen.jsx';
 import Style from '../scss/Auth.scss';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import { Link } from 'react-router-dom'
 
 class EmailField extends React.Component{ 
     render(){
-        return <input type="text" placeholder="Email" defaultValue={this.props.defaultValue} />;
+        return <input type="text" placeholder="Email" {...this.props} />;
     }
 }
 
@@ -15,7 +17,7 @@ EmailField.defaultProps = {
 
 class PasswordField extends React.Component { 
     render() {
-        return <input type="password" placeholder="Password" defaultValue={this.props.defaultValue} />;
+        return <input type="password" placeholder="Password" {...this.props} />;
     }
 }
 
@@ -33,7 +35,10 @@ class LoginForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {loading: false};
+        this.state = {
+            loading: false,
+            error: null
+        };
     }
 
     login(e) {
@@ -44,49 +49,64 @@ class LoginForm extends React.Component {
         this.setState({loading: true});
 
         auth.setPersistence(this.props.fire.firebase_.auth.Auth.Persistence.SESSION)
-        .then(function() {
+        .then(() => {
             // Existing and future Auth states are now persisted in the current
             // session only. Closing the window would clear any existing state even
             // if a user forgets to sign out.
             // ...
             // New sign-in will be persisted with session persistence.
-            return auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+
+            return auth.signInWithEmailAndPassword(email, password).catch(error => {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 // ...
-                console.error(errorCode, errorMessage);
+                // console.error(errorCode, errorMessage);
+                this.setState({error: errorMessage, loading: false});
             });
         })
-        .catch(function(error) {
+        .catch(error => {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
+            this.setState({error: errorMessage, loading: false});
         });
 
     }
 
+    clearMessages(e){
+        if (this.state.error) {
+            this.setState({error: null});
+        }
+    }
+
     render() {
 
-        const LoadingMessage = function(props) {
-            const h1Style = {
-              color: 'blue'
-            };
-            if (props.loading) {
-                return <h1 style={h1Style}>Loading...</h1>;
-            }
-            else{
-                return <h1 style={h1Style}>Login: </h1>;
-            }
-        }
+        const buttonDisabledState = (this.state.loading) ? true : false ;
+        const errorMessage = <div className="errorMessage">{this.state.error}</div>
 
         return (
             <div className="Auth LoginForm">
                 <div className="mainContent">
-                    <LoadingMessage loading={this.state.loading} />
-                    <EmailField ref={ field => { this.emailField = field;}} />
-                    <PasswordField ref={field => {this.pwField = field} } />
-                    <button ref={o => {this.x = o} } onClick={this.login.bind(this)}>Log In</button>
+                    <div className="mainForm">
+                        <div className="logo">simtim</div>
+                        
+                        <CSSTransitionGroup transitionName="errorMessage" 
+                            className="transitioningContentErrorMessage"
+                            component="div"
+                            transitionEnterTimeout={300}
+                            transitionLeaveTimeout={300}
+                        >
+                            {this.state.error && errorMessage}
+                        </CSSTransitionGroup>
+
+                        <EmailField ref={ field => { this.emailField = field;}} onFocus={this.clearMessages.bind(this)} />
+                        <PasswordField ref={field => {this.pwField = field} } onFocus={this.clearMessages.bind(this)} />
+                        <button disabled={buttonDisabledState} ref={o => {this.x = o} } onClick={this.login.bind(this)}>Log In</button>
+                        <div id="loginWrapper">
+                            <Link to="/createLogin">Create a login</Link>
+                        </div>
+                    </div>
                 </div>
                 <SplashScreen />
             </div>
@@ -127,94 +147,5 @@ class LogoutLink extends React.Component {
         return (<a href="#" onClick={this.logOut.bind(this)}>Sign this user out</a>);
     }
 }
-
-// class AuthForms extends React.Component{
-
-//     create() {
-//         // const email = "test1@test.com";
-//         // const password = "thepwisthebest1!";
-
-//         // auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
-//         //   var errorCode = error.code;
-//         //   var errorMessage = error.message;
-//         //   console.error(errorCode, errorMessage)
-//         // });
-//     }
-
-//     sendForgot() {
-//         const auth = this.props.auth;
-//         auth.sendPasswordResetEmail(auth.currentUser.email).then(function() {
-//           // Password reset confirmation sent. Ask user to check their email.
-//           console.log("sent, check the email");
-//         }).catch(function(error) {
-//           // Error encountered while sending password reset code.
-//           console.error("counldnt send", error);
-//         });
-//     }
-
-//     sendData() {
-//         const auth = this.props.auth;
-//         const userId = auth.currentUser.uid;
-
-//         // let dbAction = this.props.db.ref('users/' + new Date().getTime());
-//         let dbAction = this.props.db.ref('/users/');
-
-//         // dbAction.on('value', snap => {
-//         //     console.log("changed: ", snap.val());
-//         // });
-
-//         // dbAction.push({
-//         //     username: "there",
-//         //     email: "there",
-//         //     profile_picture : "everywhere"
-//         // });
-
-//         dbAction.orderByKey().equalTo(userId).once('value').then(snap => {
-//             console.log("ordered", snap.val());
-//         })
-
-//     }
-
-//     render(){
-
-//         const emailField = <input type="text" ref={o => {this.emailField = o} } placeholder="Email" defaultValue="robertkcox@gmail.com" />
-//         const passwordField = <input type="password" ref={o => {this.pwField = o} } placeholder="Password" defaultValue="thepwisthebest1!" />
-//         const passwordAgainField = <input type="password" ref={o => {this.pwaField = o} } placeholder="Password Again" />
-
-//         const LoginForm = (
-//             <div className="Auth_LoginForm">
-//                 {emailField}
-//                 {passwordField}
-//                 <button onClick={this.login.bind(this)}>Log In</button>
-//             </div>
-//         );
-
-//         const CreateForm = (
-//             <div className="Auth_LoginForm">
-//                 {emailField}
-//                 {passwordField}
-//                 {passwordAgainField}
-//                 <button onClick={this.login.bind(this)}>Create Login</button>
-//             </div>
-//         );
-
-//         const ResetForm = (
-//             <div className="Auth_ResetForm">
-//                 Reset Form
-//             </div>
-//         );
-
-//         const formMap = {"login": LoginForm, "create": CreateForm, "reset": ResetForm};
-
-//         return (
-//             <div className="Auth">
-//                 {formMap[this.props.form]}
-//                 <a href="#" onClick={this.signOut.bind(this)}>Sign this user out</a><br /><br />
-//                 <a href="#" onClick={this.sendForgot.bind(this)}>I forgot the password</a><br /><br />
-//                 <a href="#" onClick={this.sendData.bind(this)}>Send some data</a>
-//             </div>
-//         );
-//     }
-// }
 
 export {LoginForm, CreateForm, ResetForm, LogoutLink };

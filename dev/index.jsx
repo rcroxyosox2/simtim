@@ -62,6 +62,8 @@ export default class Index extends React.Component {
                     showSettings = true;
                 }
 
+                console.log(match);
+
                 return (
                 <div className={className}>
                     <Switch>

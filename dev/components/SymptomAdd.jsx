@@ -1,5 +1,6 @@
 import React from 'react';
 import Style from '../scss/SymptomAdd.scss';
+import moment from 'moment';
 
 class SymptomAdd extends React.Component{
 
@@ -7,8 +8,8 @@ class SymptomAdd extends React.Component{
         const db = this.props.fire.database();
         const auth = this.props.fire.auth();
         const name = this.name.value;
-        const date = new Date().getTime();
-        const severity = this.severity.value;
+        const date = moment(this.date.value, 'YYYY-MM-DD').valueOf();
+        const severity = parseInt(this.severity.value);
         const note = this.note.value;
         const data = {name, date, severity, note};
         

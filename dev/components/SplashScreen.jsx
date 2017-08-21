@@ -14,11 +14,33 @@ class SplashScreen extends React.Component{
     }
 
     componentDidMount() {
-        setTimeout(() => {
+        
+        const animationTime = 60000;
+
+        this.timeout = setTimeout(() => {
             this.setState({
                 loaded: true
             });
         }, 100);
+
+        // this.interval1 = setInterval(() => {
+        //     this.setState({
+        //         loaded: false
+        //     });
+
+        // }, animationTime);
+
+        // this.interval2 = setInterval(() => {
+        //     this.setState({
+        //         loaded: true
+        //     });
+        // }, animationTime * 2);
+    }
+
+    componentWillUnmount() {
+        // clearInterval(this.interval1);
+        // clearInterval(this.interval2);
+        clearTimeout(this.timeout);
     }
 
     render(){
@@ -28,14 +50,14 @@ class SplashScreen extends React.Component{
         return (
             <div className={`SplashScreen ${loadedClass}`}>
 
-                <div className="mountainContainer">
-                    <div>
-                        Track your symptoms, <br />
-                        find the road to recovery
-                    </div>
+                <div className="mountainContainer"></div>
+                <div className="cloudBlur"></div>
+                <div className="clouds1"></div> 
+                <div className="clouds2"></div> 
+                <div id="tagLine">
+                    Track your symptoms, <br />
+                    find the road to recovery
                 </div>
-                <div id="clouds1"></div> 
-                <div id="clouds2"></div> 
             </div>
         );
     }

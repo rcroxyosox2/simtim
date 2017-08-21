@@ -76,9 +76,10 @@ class Home extends React.Component{
 
         return (
             <Route children={
-                ({match}) => 
+                (match) => 
                     {
-                        let [parent, subview] = match.url.substring(1).split("/"); 
+                        let [parent, subview] = match.location.pathname.substring(1).split("/"); 
+                        
                         let inAddMode = (subview == ADD_MODE);
                         let inChartMode = (parent == CHART_MODE);
                         let modeMapClass = "";
