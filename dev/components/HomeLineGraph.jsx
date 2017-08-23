@@ -2,7 +2,7 @@ import React from 'react';
 import Style from '../scss/HomeLineGraph.scss';
 import LineGraph from './LineGraph.jsx';
 import moment from 'moment';
-import {getConsolidatedDataValuesByDate} from './Helpers.jsx';
+import {GroupDataCreator, HomeGraphDataHelp} from './HomeGraphDataHelp.jsx';
 
 
 class HomeLineGraph extends React.Component{
@@ -11,35 +11,51 @@ class HomeLineGraph extends React.Component{
         super(props);
         this.state = {
             loading: true,
-            symptoms: {}
+            symptoms: {},
+            sleep: {},
+            excercise: {}
         };
     }
 
     componentDidMount() {
         const db = this.props.fire.database();
         const auth = this.props.fire.auth();
-        let symptomsRef = db.ref("/u001/symptoms").orderByChild('date'); // TODO: convert u001 to userid 
-        symptomsRef.on('value', (snap) => {
-            this.setState({loading: false, symptoms: snap});
-        });  
+        const weekAgo = moment().startOf('day').subtract(1, 'week').valueOf();
+        const today = moment().endOf('day').valueOf();
+
+        const userServices = db.ref('/u001');
+        userServices.on('value', snap => {
+            let symptoms = snap.child('symptoms').val();
+            let sleep = snap.child('sleep').val();
+            let excercise = snap.child('excercise').val();
+            this.setState({symptoms: symptoms, sleep: sleep, excercise: symptoms});
+        });
+
     }
 
     render(){
 
-        let symptoms = {};
-        this.state.symptoms.forEach && this.state.symptoms.forEach(item => {
-            symptoms[item.key] = item.val();
+        let consolidatedSymptoms = new GroupDataCreator({
+            dataName: "symptom",
+            data: this.state.symptoms, 
+            keyString: "severity",
         });
 
-        let consolidated = getConsolidatedDataValuesByDate({data: symptoms, keyString: "severity"});
-
-        let labels = [];
-        let data = [];
-
-        consolidated.forEach(item => {
-            labels.push(item.label);
-            data.push(item.data);
+        let consolidatedSleep = new GroupDataCreator({
+            dataName: "sleep",
+            data: this.state.sleep, 
+            keyString: "hours",
+            normalizer: 8 // hours of sleep
         });
+
+        let helper = new HomeGraphDataHelp({
+            granularity: HomeGraphDataHelp.DATE_FORMATTERS.DAY,
+            data: [
+                consolidatedSymptoms, consolidatedSleep
+            ]
+        });
+
+        let {data, labels} = helper.getChartReadyData();
 
         return (
             <div className="HomeLineGraph">

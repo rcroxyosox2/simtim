@@ -1,42 +1,31 @@
 @import "base";
-@import '../../lib/chartist/overrides.scss';
+
+$ct-text-color: $defaultFontColor;
+$ct-text-size: 10px;
+
 @import '../../lib/chartist/chartist.scss';
 
+
 .LineGraph{
+
     .ct-chart{
         position: absolute;
         @include sq(100%);
         overflow: hidden;
         // padding: $defaultMarginsLeftRight;
     }
-    .ct-labels{
-        foreignObject{
 
-            // &:not(:first-child):not(:last-child) {
-            //     > * {
-            //         text-align: center;
-            //         display: block;
-            //         margin-left: -50%;
-            //     }
-            // }
+    .ct-line{
+        stroke-linecap: round;
+    }
 
-            // &:not(:first-child):not(:last-child) {
-            //     > * {
-            //         text-align: center;
-            //         display: block;
-            //         margin-left: -50%;
-            //     }
-            // }
-
-            // &:last-child{
-            //     > * {
-            //         white-space: nowrap;
-            //         text-align: right;
-            //         width: 100% !important;
-            //         position: relative;
-            //         left: calc(-100% - 5px);
-            //     }
-            // }
-        }
+    .ct-label{
+        text-transform: uppercase;
+        opacity: 0.63;
+        margin-left: -50%;
+        text-align: center !important;
+        display: inline-block !important;
+        vertical-align: top;
+        white-space: nowrap;
     }
 }

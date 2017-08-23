@@ -1,5 +1,6 @@
 @import "base";
 
+
 @include keyframes(cloud) {
     from{
         opacity: 1;
@@ -22,6 +23,38 @@
     }
 }
 
+@include keyframes(twinkle) {
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0;
+    }
+}
+
+@include keyframes(pulse) {
+    0%{
+        @include transform(scale(1));
+        border-color: rgba($eventColor, 0.75);
+    }
+    50%{
+        @include transform(scale(0.7));
+        border-color: rgba($eventColor, 0.95);
+    }
+}
+
+@mixin starPosition($i, $t, $r) {
+    .star:nth-child(#{$i}) {
+        $n: random(5000) + 10;
+        $n2: random(6) + 1;
+        $d: $n + ms;
+        $d2: $n2 + s;
+        top: $t; 
+        right: $r;
+        @include animation(twinkle $d2 linear $d infinite);
+    }
+}
+
 .SplashScreen{
     @include sq(100%);
     position: absolute;
@@ -35,17 +68,70 @@
     $animationTime: 60000ms;
     $animationTimeSlow: $animationTime - ($animationTime * .2);
 
-    .cloudBlur{
+    .cloudBlur, .cloudBlur2 {
         $w: 200px;
-        @include size($w, 25px);
+        @include size($w, 38px);
         @include border-radius($w/2);
-        @include filter(blur(35px));
         position: absolute;
+    }
+
+    .cloudBlur{
         left: -60%;
         top: 15%;
+        @include filter(blur(30px));
         background-color: $eventColor;
         @include animation(cloud $animationTime linear 0s infinite);
     }
+
+    .cloudBlur2{
+        right: -60%;
+        top: 45%;
+        @include filter(blur(18px));
+        height: 80px;
+        background-color: $gray1;
+        @include animation(cloudRight $animationTime linear 0s infinite);
+    }
+
+    .nightSky{
+        $w: 80%;
+        $h: 50%;
+        @include size($w, $h);
+        @include border-radius($w/2);
+        @include filter(blur(40px));
+        position: absolute;
+        right: -$w/2;
+        top: -$h/2;
+        background-color: $eventColor;
+    }
+
+    .squiggle{
+        $w: 426px;
+        $h: 153px;
+        background-size: $w $h;
+        background-repeat: no-repeat;
+        position: absolute;
+        background-image: url("../img/squiggle.svg");
+        background-position: 62px center;
+        top: 0;
+        right: 0;
+        height: $h;
+        width: $w;
+        opacity: 0.5;
+    }
+
+    .moon{
+        $s: 40px;
+        @include sq($s);
+        border-radius: $s/2;
+        @include animation(pulse 10s ease-in-out 0s infinite);
+        border: 5px solid rgba($eventColor, 0.75);
+        position: absolute;
+        right: $defaultMarginsLeftRight;
+        top: $defaultMarginsLeftRight;
+        background: $gray1;
+        z-index: 2;
+    }
+
     .clouds1{
         @include animation(cloud $animationTime linear 0s infinite);
         background-image: url("../img/clouds.svg");
@@ -60,6 +146,36 @@
         right: -40%;
         top: 71%;
         @include size(129px, 38px);
+    }
+
+    .stars{
+        position: absolute;
+        @include sq(100%);
+        .star{
+            position: absolute;
+            background: $gray2;
+            $s: 4px;
+            @include sq($s);
+            border-radius: $s/2;
+        }
+        @include starPosition(1, 156px, 100px);
+        @include starPosition(2, 50px, 80px);
+        @include starPosition(3, 5px, 20px);
+        @include starPosition(4, 50px, 20px);
+        @include starPosition(5, 90px, 90px);
+        @include starPosition(6, 106px, 40px);
+        @include starPosition(7, 35px, 108px);
+        @include starPosition(8, 14px, 76px);
+        @include starPosition(9, 124px, 77px);
+        @include starPosition(10, 86px, 16px);
+        @include starPosition(11, 144px, 24px);
+        @include starPosition(12, 7px, 129px);
+        @include starPosition(13, 68px, 138px);
+        @include starPosition(14, 164px, 18px);
+        @include starPosition(15, 48px, 159px);
+        @include starPosition(16, 33px, 37px);
+        @include starPosition(17, 34px, 10px);
+        @include starPosition(18, 76px, 129px);
     }
 
     #tagLine{

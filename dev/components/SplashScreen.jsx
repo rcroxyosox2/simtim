@@ -13,6 +13,21 @@ class SplashScreen extends React.Component{
         }
     }
 
+    getStars(n) {
+        let items = [];
+
+        for(let i = 0; i < n; i++) {
+            let s = Math.floor(Math.random() * 4) + 2;
+            let style = {
+                width: s,
+                height: s,
+                borderRadius: s/2
+            };
+            items.push(<div className="star" style={style} key={i+"star"}></div>);
+        }
+        return <div className="stars">{items}</div>;
+    }
+
     componentDidMount() {
         
         const animationTime = 60000;
@@ -22,24 +37,9 @@ class SplashScreen extends React.Component{
                 loaded: true
             });
         }, 100);
-
-        // this.interval1 = setInterval(() => {
-        //     this.setState({
-        //         loaded: false
-        //     });
-
-        // }, animationTime);
-
-        // this.interval2 = setInterval(() => {
-        //     this.setState({
-        //         loaded: true
-        //     });
-        // }, animationTime * 2);
     }
 
     componentWillUnmount() {
-        // clearInterval(this.interval1);
-        // clearInterval(this.interval2);
         clearTimeout(this.timeout);
     }
 
@@ -52,8 +52,13 @@ class SplashScreen extends React.Component{
 
                 <div className="mountainContainer"></div>
                 <div className="cloudBlur"></div>
+                <div className="cloudBlur2"></div>
                 <div className="clouds1"></div> 
                 <div className="clouds2"></div> 
+                <div className="nightSky"></div>
+                <div className="moon"></div> 
+                {this.getStars(18)}
+                <div className="squiggle"></div> 
                 <div id="tagLine">
                     Track your symptoms, <br />
                     find the road to recovery

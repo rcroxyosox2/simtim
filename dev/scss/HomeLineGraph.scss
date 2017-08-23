@@ -5,6 +5,14 @@
         stroke: $symptomColor;
     }
 
+    .ct-series-b .ct-point, .ct-series-b .ct-line{
+        stroke: $sleepColor;
+    }
+
+    .ct-seriesc .ct-point, .ct-seriesc .ct-line{
+        stroke: $excerciseColor;
+    }
+
     // flex: 3;
     // display: flex;
     // flex-direction: column;

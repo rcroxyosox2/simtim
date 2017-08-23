@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from '../scss/LineGraph.scss';
 import ChartistGraph from 'react-chartist';
-
+import chartist from 'chartist';
 
 class LineGraph extends React.Component{
 
@@ -10,7 +10,6 @@ class LineGraph extends React.Component{
     }
 
     render(){
-
         const MAIN_MARGINS = 45;
 
         if (this.props.delayRedraw) {
@@ -30,14 +29,15 @@ class LineGraph extends React.Component{
 
         const data = {
             labels: this.props.labels,
-            series: [ this.props.data ]
+            series: this.props.data
         };
 
         const options = {
-            // high: 10,
-            // low: -10,
             fullWidth: true,
-            showPoint: false,
+            showPoint: true,
+            lineSmooth: chartist.Interpolation.cardinal({
+                fillHoles: true,
+            }),
             chartPadding:{
                 top: MAIN_MARGINS / 2,
                 right: (5 + MAIN_MARGINS),
@@ -45,19 +45,28 @@ class LineGraph extends React.Component{
                 left: (MAIN_MARGINS)
             },
             axisY: {
+                referenceValue: 1,
                 showGrid: false,
                 showLabel: false,
                 offset: 0
             },
             axisX: {
+
                 stretch: 'middle',
                 showGrid: false,
                 labelOffset: {
                     y: 20
+                },
+                labelInterpolationFnc: function(value, i, label){
+                    let f = 12; // Charactor with of the font
+                    let c = label[i].length; // length of the string
+                    let w = window.innerWidth; // size of the window (should be size of the graph but whatevs)
+                    let s  = parseInt(w / (f*c)); // how many can fit in the window
+                    let m = parseInt(label.length / s) // get a modulus
+                    let ml = 2; // but make sure its not too small
+
+                    return ((i % Math.max(m,ml) == 0)) ? value : null;
                 }
-                // labelInterpolationFnc: function(value, index) {
-                //     return index % 2 === 0 ? value : null;
-                // }
             }
         };
 
