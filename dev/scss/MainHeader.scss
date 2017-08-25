@@ -9,50 +9,64 @@
     @include transition($homeServicesExpand);
     .addMode &{
         flex-basis:  0;
+        opacity: 0;
+        // @include translateY(-10%);
+        #mainLogoContainer{
+            a{
+                @include transform(scale(0.9));
+            }
+        }
+        #mainSettingsContainer{
+            a{
+                @include translateY(-100%);
+                // @include transform(scale(0.9));
+            }
+        }
     }
     > div {
         flex: 1;
         position: relative;
         a{
             position: absolute;
+            @include transition($homeServicesExpand);
         }
-        &:first-child{
-            a{
-                $h: 14px;
-                $w: 55px;
-                @include size($w, 100%);
-                left: $defaultMarginsLeftRight;
-                top: 0;
-                background-image: url("../img/logo.svg");
-                background-position: center calc(50% - 2px);
-                background-repeat: no-repeat;
-                background-size: 100%;
-                text-indent: -9999px;
-            }
+    }
+    #mainLogoContainer{
+        a{
+            $h: 14px;
+            $w: 55px;
+            @include size($w, 100%);
+            left: $defaultMarginsLeftRight;
+            top: 0;
+            background-image: url("../img/logo.svg");
+            background-position: center calc(50% - 2px);
+            background-repeat: no-repeat;
+            background-size: 100%;
+            text-indent: -9999px;
         }
-        &:last-child{
-            a{
-                display: block;
-                @include size(58px, 100%);
-                right: $defaultMarginsLeftRight;
-                top: 0;
-                padding: 0 20px;
-            }
-            hr{
-                width: 100%;
-                $h: 1px;
-                $m: 3px;
-                margin: 0;
-                display: block; 
-                content: ""; 
-                border-style: solid; 
-                border-color: $defaultFontColor; 
-                border-width: $h; 
-                border-radius: $h/2;
-                margin-top: 3px;
-                &:first-child{
-                    margin-top: ($mainHeaderHeight - ((($h+1) * 3) + (3px * 3))) / 2;
-                }
+    }
+    #mainSettingsContainer{
+        a{
+            display: block;
+            @include size(58px, 100%);
+            right: $defaultMarginsLeftRight;
+            top: 0;
+            padding: 0 20px;
+        }
+        hr{
+            width: 100%;
+            $h: 1px;
+            $m: 3px;
+            margin: 0;
+            display: block; 
+            content: ""; 
+            border-style: solid; 
+            border-color: $defaultFontColor; 
+            border-width: $h; 
+            border-radius: $h/2;
+            margin-top: 3px;
+            &:first-child{
+                margin-top: ($mainHeaderHeight - ((($h+1) * 3) + (3px * 3))) / 2;
             }
         }
     }

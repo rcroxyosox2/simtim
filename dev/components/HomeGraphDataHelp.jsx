@@ -1,72 +1,5 @@
 import moment from 'moment';
-
-
-export class ArrayHelp {
-
-    /* a: expects and array */
-    static arrayAvg(a, iterator){
-        let s = 0;
-        const l = a.length;
-        for (let i = 0; i < l; i++) {
-            let n = a[i];
-            s += parseInt(n); iterator && iterator(n);
-        }
-        return s / a.length;
-    }
-
-    /* a: expects and array */
-    static arrayNormalize(a, normalizer){
-        let avg = (normalizer) ? normalizer : ArrayHelp.arrayAvg(a);
-        return a.map(v =>{
-            return (v / avg);
-        });
-    }
-
-    static pluck(obj, key, where){
-        return Object.keys(obj).map((f) => {
-            var item = obj[f][key];
-            if(where && item == where) {
-                return item;
-            }
-            return item
-        })
-    }
-
-    static mergeDedupe(arrOfArrs){
-      return [ ...new Set( [].concat( ...arrOfArrs ) ) ];
-    }
-
-    static arrayDups(a) {
-        var len = a.length,
-          out = [],
-          counts = {};
-
-        for (var i=0;i<len;i++) {
-            var item = a[i];
-            counts[item] = counts[item] >= 1 ? counts[item] + 1 : 1;
-            if (counts[item] === 2) {
-              out.push(item);
-            }
-        }
-
-        return out;
-    }
-
-    static sortByDate(a,b) {
-
-        let date1 = a
-        let date2 = b;
-
-        if(a.date){
-            date1 = a.date;
-            date2 = b.date;
-        }
-
-        return new Date(date1) - new Date(date2);
-    }
-
-}
-
+import ArrayHelp from './ArrayHelp.jsx';
 
 
 export class GroupDataCreator {
@@ -76,7 +9,6 @@ export class GroupDataCreator {
             data: null, // the firebase.val() data
             keyString: null, // the key to use as the source of data taken from options.data
             normalizer: null, // optionally normalize the data manually instead of using the average
-            granularity: HomeGraphDataHelp.DEFAULT_GRANULARITY, // the granularity to show data (ie. month, day, year, etc TODO: make this smart)
             duration: null // the span of time to use (TODO: Do this)
         }, userOptions);
 
@@ -90,62 +22,197 @@ export class GroupDataCreator {
 
 export class HomeGraphDataHelp {
 
+    static get DURATIONS() {
+        return {
+            YEARS_5: "YEARS_5",
+            YEARS_2: "YEARS_2",
+            YEAR: "YEAR",
+            MONTH : "MONTH",
+            WEEK : "WEEK",
+            DAY : "DAY",
+            MAX : "MAX"
+        }
+    }
+
+
     static get DATE_FORMATTERS() {
         return {
             YEAR: "YYYY",
             MONTH: "MMM YY",
-            DAY: "ddd MMM DD YY"
+            DAY: "MM-DD-YYYY",
+            HOUR: "ddd h:mm"
         };
-    }
-
-    static get DEFAULT_GRANULARITY() {
-        return HomeGraphDataHelp.DATE_FORMATTERS.MONTH;
     }
 
     constructor(passedOptions) {
         var options = Object.assign({
-            data: null, //  Should be an array of GroupItem's
-            granularity: HomeGraphDataHelp.DEFAULT_GRANULARITY,
-            duration: null
+            groupDataCreators: null, //  Should be an array of groupItemCreators's
+            duration: HomeGraphDataHelp.DURATIONS.MAX // duration set by the user
         }, passedOptions);
 
-
         Object.assign(this, options);
-        for (let i in this.data) {
-            if(!(this.data[i] instanceof GroupDataCreator)) {
-                throw new Error('this.data should be an instance of GroupItem');
+
+        for (let i in this.groupDataCreators) {
+            if(!(this.groupDataCreators[i] instanceof GroupDataCreator)) {
+                throw new Error('this.groupDataCreators should be an instance of GroupDataCreator');
             }
         }
 
+        // private props
+        this._availableDurations = this._getAvailableDurations();
+        this._calculatedDuration = this._getCalculatedDuration(); 
+        this._granularity = this._getGranularityFromDuration();
+        this._durationFilter = this._getDurationFilter();
+        this._groupItemData = this._convertDataToGroupItems(); // The prepped data for the graph
     }
 
-    getConvertedGroupItems() {
+    _getGranularityFromDuration() {
+        let calculatedDuration = this._calculatedDuration;
+        let durationToGranulariyMap = {};
+        let d = HomeGraphDataHelp.DURATIONS;
+        let g = HomeGraphDataHelp.DATE_FORMATTERS;
+
+        durationToGranulariyMap[d.YEARS_5] = g.YEAR;
+        durationToGranulariyMap[d.YEARS_2] = g.YEAR;
+        durationToGranulariyMap[d.YEAR] = g.MONTH;
+        durationToGranulariyMap[d.MONTH] = g.DAY;
+        durationToGranulariyMap[d.WEEK] = g.DAY;
+        durationToGranulariyMap[d.DAY] = g.HOUR;
+
+        return durationToGranulariyMap[calculatedDuration];
+    }
+
+    _dateWithin(dateStamp, timeAmount, timeName, endTime = moment()) {
+        return moment(dateStamp).isBetween(moment().startOf('day').subtract(timeAmount, timeName), endTime)
+    }
+
+    _getAvailableDurations() { // Only use on firebase data
+
+        let availableDurations = {}; for (let k in HomeGraphDataHelp.DURATIONS) { availableDurations[k] = 0;}
+
+        this.groupDataCreators.forEach((groupItemArrCreator) => {
+            let data = groupItemArrCreator.data;
+            for (let k in data) {
+                let item = data[k];
+
+                if (this._dateWithin(item.date, 1, "day", moment())) {
+                    availableDurations[HomeGraphDataHelp.DURATIONS.DAY] += 1;
+                }
+
+                if (this._dateWithin(item.date, 1, "week", moment().subtract(1, "day"))) {
+                    availableDurations[HomeGraphDataHelp.DURATIONS.WEEK] += 1;
+                }
+
+                if (this._dateWithin(item.date, 1, "month", moment().subtract(1, "week"))) {
+                    availableDurations[HomeGraphDataHelp.DURATIONS.MONTH] += 1;
+                }
+
+                if (this._dateWithin(item.date, 1, "year", moment().subtract(1, "month"))) {
+                    availableDurations[HomeGraphDataHelp.DURATIONS.YEAR] += 1 ;
+                }
+
+                if (this._dateWithin(item.date, 2, "year", moment().subtract(1, "year"))) {
+                    availableDurations[HomeGraphDataHelp.DURATIONS.YEARS_2] += 1 ;
+                }
+
+                if (this._dateWithin(item.date, 5, "year", moment().subtract(2, "years"))) {
+                    availableDurations[HomeGraphDataHelp.DURATIONS.YEARS_5] += 1 ;
+                }
+
+            }
+        });
+
+        return availableDurations;
+    }
+
+    _getCalculatedDuration() {
+
+        if(!this._availableDurations) {
+            console.warn(`No _availableDurations set (${this._availableDurations})`);
+            return;
+        }
+
+        let userSetUseration = this.duration;
+        let availableDurations = this._availableDurations;
+
+        let durationOrder = [
+            HomeGraphDataHelp.DURATIONS.YEARS_5,
+            HomeGraphDataHelp.DURATIONS.YEARS_2,
+            HomeGraphDataHelp.DURATIONS.YEAR,
+            HomeGraphDataHelp.DURATIONS.WEEK,
+            HomeGraphDataHelp.DURATIONS.MONTH,
+            HomeGraphDataHelp.DURATIONS.DAY
+        ];
+
+        const getOldestDuration = (startingIndex = 0) => {
+            let oldestDuration;
+            for (let i = startingIndex; i < durationOrder.length; i++) {
+                if(availableDurations[durationOrder[i]] > 0) {
+                    oldestDuration = durationOrder[i];
+                    break;
+                }
+            }
+            return oldestDuration;
+        }
+
+        if(userSetUseration == HomeGraphDataHelp.DURATIONS.MAX) {
+            return getOldestDuration();
+        }
+        else {
+
+            let startingIndex = durationOrder.indexOf(userSetUseration);
+            return getOldestDuration(startingIndex);
+        }
+
+        return;
+    }
+
+    // should be used on a array.filer call
+    _getDurationFilter() {
+
+        let duration = this._calculatedDuration;
+
+        if(!duration){
+            return (item) => { return item; }
+        }
+
+        let [str, amount] = duration.split("_");
+        amount = (!amount) ? 1 : amount;
+        str = str.toLowerCase();
+
+        return (item) => { // Expects a groupItem
+            return this._dateWithin(item.date, amount, str, moment());
+        }
+    }
+
+    _convertDataToGroupItems() {
         let ret = [];
-        this.data.forEach((groupItem) => {
-            ret.push(this.getConvertedGroupItem(groupItem))
-        })
+        this.groupDataCreators.forEach((groupItemArrCreator) => {
+            let itemGroup = this._convertDataToGroupItem(groupItemArrCreator);
+            ret.push(itemGroup)
+        });
+
         return ret;
     }
 
 
-    // Converts this.data items into groupedItems
-    getConvertedGroupItem(groupItem) {
+    // Converts this.groupDataCreators items into groupedItems
+    _convertDataToGroupItem(groupDataCreator) {
 
-        let options = groupItem;
         let groupedData = {};
         let check = {};
-        let data = options.data;
+        let data = groupDataCreator.data;
 
         // Put all the data in an json blob organized by date as key and the data for that date as value (array)
         for (let k in data) {
             let item = data[k];
-            let dateFormatted = moment(item.date).format(this.granularity);
-            let dataItem = parseInt(item[options.keyString]) || 0;
+            let dateFormatted = moment(item.date).format(this._granularity);
+            let dataItem = parseInt(item[groupDataCreator.keyString]) || 0;
 
             if (!groupedData[dateFormatted]) {
                 groupedData[dateFormatted] = {
                     date: item.date,
-                    dataName: options.dataName
+                    dataName: groupDataCreator.dataName
                 };
             }
 
@@ -165,7 +232,7 @@ export class HomeGraphDataHelp {
         }
 
         // Normalize the data
-        dataToNormalize = ArrayHelp.arrayNormalize(dataToNormalize, options.normalizer);
+        dataToNormalize = ArrayHelp.arrayNormalize(dataToNormalize, groupDataCreator.normalizer);
 
         // Add all the computed values
         let i = 0;
@@ -179,22 +246,23 @@ export class HomeGraphDataHelp {
 
         // Sort the data by date
         groupedDataArr = groupedDataArr.sort(ArrayHelp.sortByDate);
+        groupedDataArr = groupedDataArr.filter(this._durationFilter.bind(this));
 
-        return { groupedDataArr }
+        let ret = {};
+        ret[groupDataCreator.dataName] = groupedDataArr;
+
+        // console.log("Convert::", ret);
+        return ret;
     }
 
 
-    getChartReadyData(userOptions) {
 
-        let options = Object.assign({
-            data: this.getConvertedGroupItems(),
-            granularity: this.granularity
-        }, userOptions);
+    getChartReadyData() {
 
 
         // Merge all the data together
-        let merged = [].concat.apply([], options.data.map(group => {
-            return group.groupedDataArr;
+        let merged = [].concat.apply([], this._groupItemData.map(group => {
+            return Object.values(group)[0];
         })).sort(ArrayHelp.sortByDate);
 
         let dupIndexes = ArrayHelp.arrayDups(ArrayHelp.pluck(merged, "dateFormatted"));
@@ -202,18 +270,25 @@ export class HomeGraphDataHelp {
 
         let mergedFormatted = [];
         let data = [];
-        let labels = [];
+        let labels = ArrayHelp.pluck(merged, "dateFormatted");
 
         const getFillValue = function(prev, next, current) {
             if(!prev || !next) return current.normalizedData;
             return (prev.normalizedData + prev.normalizedData) / 2;
         }
 
+        // get the labels
+
+        // Loop through each item, creating a new set that includes every item and get them into a data object for the graph
         for (var i = 0; i < keys.length; i++) {
             let key = keys[i];
-            mergedFormatted.push([]);
+            let seriesObject = {className: key, name: key, data:[]}
+            
+
             merged.forEach((item, j) => {
                 var newItem = Object.assign({}, item);
+                
+                // console.log(newItem);
                 if (item.dataName !== key) {
                     // var fillValue = getFillValue(merged[j-1], merged[j+1], item);
                     newItem.data = newItem.normalizedData = null; // change this to null to see data with holes
@@ -222,19 +297,18 @@ export class HomeGraphDataHelp {
                     }
                 }
 
-                mergedFormatted[i].push(newItem);
+                seriesObject.data.push(newItem.normalizedData);
 
             });
             
+            mergedFormatted.push(seriesObject);
 
             // Set the data and the labels
             data.push(ArrayHelp.pluck(mergedFormatted[i], "normalizedData"));
-            (i == keys.length-1) && (labels = ArrayHelp.pluck(mergedFormatted[i], "dateFormatted"));
         }
 
 
-        // console.log(mergedFormatted);
-        return {data, labels};
+        return {labels: labels, series: mergedFormatted};
 
     }
 

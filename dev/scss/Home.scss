@@ -6,25 +6,32 @@
     display: flex;
     flex-direction: column;
     position: absolute;
-    
+    overflow: hidden;
+
     #mainContent{
-        flex-direction: column;
+        flex-direction: column-reverse;
         display: flex;
         flex-basis: calc(100% - #{$mainHeaderHeight});
         background: $gray4;
+        padding-top: $exmpandedChartSize;
         @include transition($homeServicesExpand);
+        overflow: hidden;
     }
 
-    .homeLineGraphContainer{
-        flex: 3;
+    .homeLineGraphBodyContainer{
+        @include size(100%, $exmpandedChartSize);
         @include transition($homeServicesExpand);
-        position: relative;
-        overflow: scroll;
+        position: absolute;
+        overflow: hidden;
+        top: $mainHeaderHeight;
         > * {
             // border: 1px solid red;
         }
         .transitioningContent{
-            position: relative;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
             top: 0;
         }
     }
@@ -33,14 +40,13 @@
     &.addMode{
         #mainContent {
             flex-basis: 100%;
+            padding-top: 0;
         }
     }
 
     &.chartMode{
-        .homeLineGraphContainer{
-            .transitioningContent{
-                top: 200px;
-            }
+        .homeLineGraphBodyContainer{
+            height: 100%;
         }
     }
 

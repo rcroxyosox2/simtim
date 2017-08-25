@@ -7,6 +7,19 @@ $ct-text-size: 10px;
 
 
 .LineGraph{
+height: 100%;
+border:1px solid red;
+    .ct-series.symptom .ct-point, .ct-series.symptom .ct-line{
+        stroke: $symptomColor;
+    }
+
+    .ct-series.sleep .ct-point, .ct-series.sleep .ct-line{
+        stroke: $sleepColor;
+    }
+
+    .ct-series.excercise .ct-point, .ct-series.excercise .ct-line{
+        stroke: $excerciseColor;
+    }
 
     .ct-chart{
         position: absolute;
@@ -17,14 +30,26 @@ $ct-text-size: 10px;
 
     .ct-line{
         stroke-linecap: round;
+        stroke-width: 3;
     }
+
+    .ct-sleep-target-line{
+        stroke: $sleepColor;
+        stroke-dasharray: 6;
+    }
+
+    
 
     .ct-label{
         text-transform: uppercase;
         opacity: 0.63;
-        margin-left: -50%;
-        text-align: center !important;
-        display: inline-block !important;
+        // @include transform(rotate(45deg));
+    }
+
+    .ct-label.ct-horizontal.ct-end{
+        // margin-left: -50%;
+        // text-align: center;
+        display: inline-block;
         vertical-align: top;
         white-space: nowrap;
     }

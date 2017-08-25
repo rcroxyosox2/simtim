@@ -6,8 +6,8 @@ class MainHeader extends React.Component{
     render(){
         return (
             <div className="MainHeader">
-                <div><a href="#">simtim</a></div>
-                <div>
+                <div id="mainLogoContainer"><a href="#">simtim</a></div>
+                <div  id="mainSettingsContainer">
                     <Link to="/settings"><hr /><hr /><hr /></Link>
                 </div>
             </div>

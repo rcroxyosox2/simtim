@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Route, history } from 'react-router-dom'
 import MainHeader from './MainHeader.jsx';
 import HomeLineGraph from './HomeLineGraph.jsx';
@@ -18,7 +19,17 @@ class Home extends React.Component{
         this.state = {activeItem: null};
     }
 
-    _handleKeyDown(e) {
+    listenScrollEvent(e) {
+        let graph = this.homeLineGraph;
+        let gh = (graph.offsetHeight/2);
+
+        let scrollView = e.target;
+        let scrollPerc = 1 - (scrollView.scrollTop / gh)
+        this.homeLineGraph.style.opacity = scrollPerc;
+        // this.homeLineGraph.style.transform = `scale(${scrollPerc})`;
+    }
+
+    handleKeyDown(e) {
 
         const ESCAPE_KEY = 27;
 
@@ -32,11 +43,11 @@ class Home extends React.Component{
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this._handleKeyDown.bind(this));
+        document.addEventListener("keydown", this.handleKeyDown.bind(this));
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this._handleKeyDown.bind(this));
+        document.removeEventListener("keydown", this.handleKeyDown.bind(this));
     }
 
     render(){
@@ -51,7 +62,7 @@ class Home extends React.Component{
             {"name": "excercise", subview: ExcerciseAdd}
         ];
 
-        const servicesHtml = services.map((item, index) => { 
+        const servicesHtml = services.reverse().map((item, index) => { 
             const path = this.props.location.pathname;
             let SubView;
             let [parent, subview] = path.substring(1).split("/"); 
@@ -80,7 +91,6 @@ class Home extends React.Component{
                     {
                         let [parent, subview] = match.location.pathname.substring(1).split("/"); 
                         
-                        let inAddMode = (subview == ADD_MODE);
                         let inChartMode = (parent == CHART_MODE);
                         let modeMapClass = "";
 
@@ -104,9 +114,10 @@ class Home extends React.Component{
                             {/*<BaseComponent message="I am the message" />*/}
                             <MainHeader />
                                 <div id="mainContent">
-                                    <div className="homeLineGraphContainer">
-                                        <HomeLineGraph delayRedraw={!inAddMode} {...this.props} />
+                                
+                                    <div className="homeLineGraphBodyContainer">
                                         <CSSTransitionGroup transitionName="chart"
+                                            onScroll={this.listenScrollEvent.bind(this)}
                                             className="transitioningContent" 
                                             component="div"
                                             transitionEnterTimeout={300}
@@ -115,6 +126,7 @@ class Home extends React.Component{
                                         {ChartSubView && <ChartSubView key="1" />}
                                         </CSSTransitionGroup>
                                     </div>
+                                    <HomeLineGraph {...this.props} ref={elm=>{this.homeLineGraph = ReactDOM.findDOMNode(elm)}} />
                                     {servicesHtml}
                                 </div>
                         </div>

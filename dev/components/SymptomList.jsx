@@ -1,12 +1,13 @@
 import React from 'react';
 import Style from '../scss/SymptomList.scss';
 import SearchField from './SearchField.jsx';
+import moment from 'moment';
 
 class SymptomListItem extends React.Component {
     render() {
         return (
             <div>
-                <span>{new Date(this.props.date).toString()}</span>
+                <span>{moment(this.props.date).format("MM-DD-YYYY")} | {this.props.date}</span>
             </div>
         );
     }

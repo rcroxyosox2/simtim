@@ -1,11 +1,12 @@
 import React from 'react';
 import Style from '../scss/SleepList.scss';
+import moment from 'moment';
 
 class SleepListItem extends React.Component{
     render() {
         return (
             <div className="SleepListItem">
-                {this.props.date}
+                {moment(this.props.date).format("ddd MMM DD")}
             </div>
         );
     }

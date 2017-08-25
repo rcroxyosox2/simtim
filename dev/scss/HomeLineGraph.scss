@@ -1,34 +1,19 @@
 @import "base";
 
 .HomeLineGraph{
-    .ct-series-a .ct-point, .ct-series-a .ct-line{
-        stroke: $symptomColor;
-    }
 
-    .ct-series-b .ct-point, .ct-series-b .ct-line{
-        stroke: $sleepColor;
-    }
-
-    .ct-seriesc .ct-point, .ct-seriesc .ct-line{
-        stroke: $excerciseColor;
-    }
-
-    // flex: 3;
-    // display: flex;
-    // flex-direction: column;
-    @include sq(100%);
+    @include size(100%, $exmpandedChartSize);
     @include transition($homeServicesExpand);
     position: absolute;
     overflow: hidden;
-    height: 100%;
-    min-height: 0;
+    cursor: pointer;
+    top: $mainHeaderHeight;
+    z-index: 2;
 
     .addMode #mainContent &{
-        flex: 0;
-    }
-
-    .chartMode #mainContent &{
-        height: $exmpandedChartSize;
+        // @include transform(scale(0.95));
+        // opacity: 0;
+        // flex: 0;
     }
 
     .LineGraph{
@@ -36,17 +21,17 @@
     }
 
     &:before{
-        content: "";
-        display: block;
-        position: absolute;
-        width: 200%;
-        height: 50%;
-        margin-left: -50%;
-        background: $gray5;
-        bottom: -20%;
-        opacity: 0.8;
-        @include filter(blur(50px));
-        @include transition($homeServicesExpand);
+        // content: "";
+        // display: block;
+        // position: absolute;
+        // width: 200%;
+        // height: 50%;
+        // margin-left: -50%;
+        // background: $gray5;
+        // bottom: -20%;
+        // opacity: 0.8;
+        // @include filter(blur(50px));
+        // @include transition($homeServicesExpand);
     }
 
     .chartMode #mainContent &{

@@ -7,6 +7,10 @@ import {GroupDataCreator, HomeGraphDataHelp} from './HomeGraphDataHelp.jsx';
 
 class HomeLineGraph extends React.Component{
 
+    click(e) {
+        this.props.history.push("/chart");
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -49,17 +53,18 @@ class HomeLineGraph extends React.Component{
         });
 
         let helper = new HomeGraphDataHelp({
-            granularity: HomeGraphDataHelp.DATE_FORMATTERS.DAY,
-            data: [
+            duration: HomeGraphDataHelp.DURATIONS.MONTH,
+            groupDataCreators: [
                 consolidatedSymptoms, consolidatedSleep
             ]
         });
 
-        let {data, labels} = helper.getChartReadyData();
+        let data = helper.getChartReadyData();
+
 
         return (
             <div className="HomeLineGraph">
-                <LineGraph {...this.props} labels={labels} data={data} />
+                <LineGraph {...this.props} data={data} />
             </div>
         );
     }
