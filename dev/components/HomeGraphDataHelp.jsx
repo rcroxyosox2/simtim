@@ -34,6 +34,19 @@ export class HomeGraphDataHelp {
         }
     }
 
+    // posible logic needed later to determine if this is a user prop
+    static get DEFAULT_DURATION() {
+        return HomeGraphDataHelp.DURATIONS.MAX;
+    }
+
+    // used for display purposes in the UI
+    static get USER_DURATIONS() {
+        return {
+            "last week" : HomeGraphDataHelp.DURATIONS.WEEK,
+            "last month" : HomeGraphDataHelp.DURATIONS.MONTH,
+            "max" : HomeGraphDataHelp.DURATIONS.MAX
+        }
+    }
 
     static get DATE_FORMATTERS() {
         return {
@@ -251,7 +264,7 @@ export class HomeGraphDataHelp {
         let ret = {};
         ret[groupDataCreator.dataName] = groupedDataArr;
 
-        // console.log("Convert::", ret);
+        console.log("Convert::", ret);
         return ret;
     }
 
@@ -265,17 +278,19 @@ export class HomeGraphDataHelp {
             return Object.values(group)[0];
         })).sort(ArrayHelp.sortByDate);
 
+        // console.log(merged);
+
         let dupIndexes = ArrayHelp.arrayDups(ArrayHelp.pluck(merged, "dateFormatted"));
         let keys = ArrayHelp.mergeDedupe(ArrayHelp.pluck(merged, "dataName"));
 
         let mergedFormatted = [];
         let data = [];
-        let labels = ArrayHelp.pluck(merged, "dateFormatted");
+        let labels = ArrayHelp.mergeDedupe(ArrayHelp.pluck(merged, "dateFormatted"));
 
-        const getFillValue = function(prev, next, current) {
-            if(!prev || !next) return current.normalizedData;
-            return (prev.normalizedData + prev.normalizedData) / 2;
-        }
+        // const getFillValue = function(prev, next, current) {
+        //     if(!prev || !next) return current.normalizedData;
+        //     return (prev.normalizedData + prev.normalizedData) / 2;
+        // }
 
         // get the labels
 
@@ -302,11 +317,11 @@ export class HomeGraphDataHelp {
             });
             
             mergedFormatted.push(seriesObject);
+            // console.log(mergedFormatted, labels);
 
             // Set the data and the labels
             data.push(ArrayHelp.pluck(mergedFormatted[i], "normalizedData"));
         }
-
 
         return {labels: labels, series: mergedFormatted};
 

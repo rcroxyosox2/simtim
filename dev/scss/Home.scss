@@ -13,13 +13,13 @@
         display: flex;
         flex-basis: calc(100% - #{$mainHeaderHeight});
         background: $gray4;
-        padding-top: $exmpandedChartSize;
+        padding-top: $expandedChartSize;
         @include transition($homeServicesExpand);
         overflow: hidden;
     }
 
     .homeLineGraphBodyContainer{
-        @include size(100%, $exmpandedChartSize);
+        @include size(100%, $expandedChartSize);
         @include transition($homeServicesExpand);
         position: absolute;
         overflow: hidden;

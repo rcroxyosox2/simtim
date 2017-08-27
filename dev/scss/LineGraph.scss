@@ -7,8 +7,17 @@ $ct-text-size: 10px;
 
 
 .LineGraph{
+
 height: 100%;
-border:1px solid red;
+// border:1px solid red;
+
+    .clickablePointTarget{
+        @include transition(fill 100ms ease-in-out);
+        &.blink{
+            fill: rgba($gray2, 0.1);
+        }
+    }
+
     .ct-series.symptom .ct-point, .ct-series.symptom .ct-line{
         stroke: $symptomColor;
     }
@@ -19,6 +28,10 @@ border:1px solid red;
 
     .ct-series.excercise .ct-point, .ct-series.excercise .ct-line{
         stroke: $excerciseColor;
+    }
+
+    .ct-point{
+        stroke-width: 7px;
     }
 
     .ct-chart{

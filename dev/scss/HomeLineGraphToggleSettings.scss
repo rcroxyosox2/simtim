@@ -4,10 +4,10 @@
     @include transition($homeServicesExpand);
     position: relative;
     box-sizing: border-box;
-    padding: $exmpandedChartSize $defaultMarginsLeftRight $defaultMarginsLeftRight*2;
+    padding: ($expandedChartSize+$buttonGroupCalculatedHeight) $defaultMarginsLeftRight $defaultMarginsLeftRight*2;
 
     .chartMode #mainContent &{
-        z-index: 2;
+        z-index: 3;
     }
 
     // &.chart-enter {

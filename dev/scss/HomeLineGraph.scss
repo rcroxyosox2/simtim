@@ -2,18 +2,24 @@
 
 .HomeLineGraph{
 
-    @include size(100%, $exmpandedChartSize);
+    @include size(100%, $expandedChartSize);
     @include transition($homeServicesExpand);
     position: absolute;
-    overflow: hidden;
+    overflow: visible;
     cursor: pointer;
     top: $mainHeaderHeight;
-    z-index: 2;
+    z-index: 3;
 
     .addMode #mainContent &{
         // @include transform(scale(0.95));
         // opacity: 0;
         // flex: 0;
+    }
+    .HomeGraphFilter {
+        top: -($buttonGroupCalculatedHeight+$buttonGroupTopMargin);
+        .ButtonGroup{
+            padding-top: $buttonGroupTopMargin;
+        }
     }
 
     .LineGraph{
@@ -35,6 +41,7 @@
     }
 
     .chartMode #mainContent &{
+        top: ($mainHeaderHeight + $buttonGroupCalculatedHeight);
         &:before{
             opacity: 0;
             bottom: -100%;

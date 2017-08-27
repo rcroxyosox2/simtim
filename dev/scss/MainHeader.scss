@@ -3,25 +3,27 @@
 .MainHeader{
     flex-basis: $mainHeaderHeight;
     display: flex;
+    position: relative;
+    z-index: 4;
     border-bottom: 1px solid $gray5;
     overflow: hidden;
     background: $gray4;
     @include transition($homeServicesExpand);
     .addMode &{
-        flex-basis:  0;
-        opacity: 0;
-        // @include translateY(-10%);
-        #mainLogoContainer{
-            a{
-                @include transform(scale(0.9));
-            }
-        }
-        #mainSettingsContainer{
-            a{
-                @include translateY(-100%);
-                // @include transform(scale(0.9));
-            }
-        }
+        // flex-basis:  0;
+        // opacity: 0;
+        // // @include translateY(-10%);
+        // #mainLogoContainer{
+        //     a{
+        //         @include transform(scale(0.9));
+        //     }
+        // }
+        // #mainSettingsContainer{
+        //     a{
+        //         @include translateY(-100%);
+        //         // @include transform(scale(0.9));
+        //     }
+        // }
     }
     > div {
         flex: 1;

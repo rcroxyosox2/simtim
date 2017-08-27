@@ -7,30 +7,44 @@ import ArrayHelp from './ArrayHelp.jsx';
 
 class LineGraph extends React.Component{
 
-    handleChartClick(e) {
-        console.log("here ya go::::", e.target);
+    handleTouchend(e) {
+        let elm = e.target;
+        elm.classList.remove('blink');
+    }
+    handleTouchstart(e) {
+
+        let path = this.props.location.pathname;
+        let [parent, subview] = path.substring(1).split("/"); 
+
+
+        if(parent != "chart") {
+            this.props.history.push("/chart");
+        }
+
+        let elm = e.target;
+        elm.classList.add('blink');
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleChartClick.bind(this));
+        this.svg.removeEventListener("touchstart", this.handleTouchstart.bind(this));
     }
 
     render(){
         const MAIN_MARGINS = 45;
 
-        if (this.props.delayRedraw) {
+        // if (this.props.delayRedraw) {
 
-            let interval;
+        //     let interval;
 
-            window.setTimeout(() => {
-                window.clearInterval(interval);
-            }, 600);
+        //     window.setTimeout(() => {
+        //         window.clearInterval(interval);
+        //     }, 600);
 
-            interval = setInterval(() => {
-                var evt = new UIEvent('resize'); 
-                window.dispatchEvent(evt);
-            }, 10);
-        }
+        //     interval = setInterval(() => {
+        //         var evt = new UIEvent('resize'); 
+        //         window.dispatchEvent(evt);
+        //     }, 10);
+        // }
 
 
         const data = this.props.data; 
@@ -88,8 +102,8 @@ class LineGraph extends React.Component{
                 
                 // Add an event listener                    
                 this.svg = context.svg.getNode();
-
-                context.svg.getNode().addEventListener('click', this.handleChartClick.bind(this));
+                this.svg.addEventListener('touchstart', this.handleTouchstart.bind(this));
+                this.svg.addEventListener('touchend', this.handleTouchend.bind(this));
 
                 if (ArrayHelp.pluck(this.props.data.series, "className", "sleep").length == 0) {
                     return;
@@ -129,17 +143,17 @@ class LineGraph extends React.Component{
                     let s = new chartist.Svg('rect', {
                         'x': (data.x - (w/2)),
                         'y': 0,
-                        'stroke': 'red',
                         'fill': 'transparent',
-                        'stroke-width': 1,
+                        // 'stroke': 'red',
+                        // 'stroke-width': 1,
                         width: w,
-                        height: outerH
+                        height: outerH,
+                        'class': 'clickablePointTarget'
                     });
 
                     s.getNode().style.marginLeft = 20;
                     
                     data.element.parent().append(s)
-                    // console.log(this.props.data.series[0].length, options.chartPadding.left);
                 }
 
                 if(data.type === 'label') {
@@ -150,14 +164,20 @@ class LineGraph extends React.Component{
                     let f = 10; // Charactor with of the font
                     let c = span.innerText.length; // length of the string
                     let calcW = (f*8);
-
+                    let ll = this.props.data.labels.length;
+                    let onLast = (data.index == ll-1);
                     let newW = calcW; //(bigW) ? bigW : data.width;
                     data.element.attr({ 
                         width: newW 
                     });
 
                     span.style.width = `${newW}px`;
-                    if(2 % this.props.data.labels.length == 0) {
+
+                    if(onLast && (ll == 3)) {
+                        span.style.textAlign = "right";
+                        span.style.marginLeft = "-"+newW+"px";
+                    }
+                    else if(2 % ll == 0) {
                         span.style.marginLeft = "-50%";
                         span.style.textAlign = "center";
                     }

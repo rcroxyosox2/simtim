@@ -31,25 +31,25 @@
     &.item_symptom{
         background-color: $symptomColor;
         border-color: lighten($symptomColor, 10%);
-        z-index: 2;
+        z-index: 3;
     }
 
     &.item_event{
         background-color: $eventColor;
         border-color: lighten($eventColor, 10%);
-        z-index: 3;
+        z-index: 4;
     }
 
     &.item_sleep{
         background-color: $sleepColor;
         border-color: lighten($sleepColor, 10%);
-        z-index: 4;
+        z-index: 5;
     }
 
     &.item_excercise{
         background-color: $excerciseColor;
         border-color: lighten($excerciseColor, 10%);
-        z-index: 5;
+        z-index: 6;
     }
 
     > a{

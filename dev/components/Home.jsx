@@ -26,6 +26,13 @@ class Home extends React.Component{
         let scrollView = e.target;
         let scrollPerc = 1 - (scrollView.scrollTop / gh)
         this.homeLineGraph.style.opacity = scrollPerc;
+
+        if(scrollPerc > 0.8) {
+            this.homeLineGraph.style.zIndex = 3;
+        }else{
+            this.homeLineGraph.style.zIndex = 2;
+        }
+
         // this.homeLineGraph.style.transform = `scale(${scrollPerc})`;
     }
 
@@ -112,9 +119,8 @@ class Home extends React.Component{
                         return (
                         <div className={className}>
                             {/*<BaseComponent message="I am the message" />*/}
-                            <MainHeader />
+                            <MainHeader {...this.props} />
                                 <div id="mainContent">
-                                
                                     <div className="homeLineGraphBodyContainer">
                                         <CSSTransitionGroup transitionName="chart"
                                             onScroll={this.listenScrollEvent.bind(this)}

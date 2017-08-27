@@ -190,7 +190,7 @@
         bottom: 0;
         @include sq(100%);
         @include transition(all 10000ms linear);
-        @include transform(translateY(5%));
+        // @include transform(translateY(5%));
         background-image: url("../img/mountains.svg");
         background-size: 100%;
         background-repeat: no-repeat;
@@ -198,8 +198,8 @@
     }
     
     &.loaded {
-        .mountainContainer{
-            @include transform(translateY(0%));
-        }
+        // .mountainContainer{
+        //     @include transform(translateY(0%));
+        // }
     }
 }

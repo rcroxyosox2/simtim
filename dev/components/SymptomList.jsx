@@ -7,7 +7,7 @@ class SymptomListItem extends React.Component {
     render() {
         return (
             <div>
-                <span>{moment(this.props.date).format("MM-DD-YYYY")} | {this.props.date}</span>
+                <span>{moment(this.props.date).format("MM-DD-YYYY")} | {this.props.date} | {this.props.severity}</span>
             </div>
         );
     }

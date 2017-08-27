@@ -1,5 +1,77 @@
 @import "~compass-mixins";
 
+
+// -------------------------------------------
+// Fonts
+// -------------------------------------------
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+$defaultFont: 'Open Sans', sans-serif;
+$logoFont: 'Georgia', serif;
+
+// -------------------------------------------
+// Colors 
+// -------------------------------------------
+
+$gray1: #FFF;
+$gray2: #E4E8E8;
+$gray4: #384240;
+$gray5: #1F2423;
+
+$maroon3: #A36F8A;
+$pink3: #B995B8;
+$hotpink4: #E8248A;
+$teal3: #749CA4;
+$green3: #9CC2AF;
+
+
+// -------------------------------------------
+// Application
+// -------------------------------------------
+
+$defaultFontColor: $gray2;
+$appBackgroundColor: $gray4;
+
+$symptomColor: $maroon3; 
+$eventColor: $pink3;
+$sleepColor: $teal3;
+$excerciseColor: $green3;
+
+$inputColors: $teal3;
+$buttonGroupBorderColor: $gray2;
+$buttonGroupTextColor: $gray4;
+$linkColor: $teal3;
+$errorColor: $hotpink4;
+
+// -------------------------------------------
+// Sizes
+// -------------------------------------------
+
+// globals
+$defaultMarginsLeftRight: 45px;
+
+// header
+$mainHeaderHeight: 50px;
+
+// buttons
+$buttonBorderRadius: 4px;
+$buttonGroupHeight: 35px;
+$buttonGroupMargins: 10px;
+$buttonGroupCalculatedHeight: $buttonGroupHeight + (2*$buttonGroupMargins);
+
+// home chart
+$buttonGroupTopMargin: 20px;
+$expandedChartSize: 200px + $buttonGroupCalculatedHeight + $buttonGroupTopMargin;
+
+
+// -------------------------------------------
+// Animations
+// -------------------------------------------
+$homeServicesExpand: all 300ms ease-in-out;
+
+
+
+
 // -------------------------------------------
 // Mixins
 // -------------------------------------------
@@ -44,56 +116,3 @@
         @content;
     }
 }
-
-// -------------------------------------------
-// Fonts
-// -------------------------------------------
-
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-$defaultFont: 'Open Sans', sans-serif;
-$logoFont: 'Georgia', serif;
-
-// -------------------------------------------
-// Colors 
-// -------------------------------------------
-
-$gray1: #FFF;
-$gray2: #E4E8E8;
-$gray4: #384240;
-$gray5: #1F2423;
-
-$maroon3: #A36F8A;
-$pink3: #B995B8;
-$hotpink4: #E8248A;
-$teal3: #749CA4;
-$green3: #9CC2AF;
-
-
-// -------------------------------------------
-// Application
-// -------------------------------------------
-
-$defaultFontColor: $gray2;
-$appBackgroundColor: $gray4;
-
-$symptomColor: $maroon3; 
-$eventColor: $pink3;
-$sleepColor: $teal3;
-$excerciseColor: $green3;
-
-$inputColors: $teal3;
-$linkColor: $teal3;
-$errorColor: $hotpink4;
-
-// -------------------------------------------
-// Sizes
-// -------------------------------------------
-
-$defaultMarginsLeftRight: 45px;
-$mainHeaderHeight: 50px;
-$exmpandedChartSize: 260px;
-
-// -------------------------------------------
-// Animations
-// -------------------------------------------
-$homeServicesExpand: all 300ms ease-in-out;

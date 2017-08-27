@@ -10,9 +10,14 @@ body{
 a{
     color: $linkColor;
     text-decoration: none;
+    outline: none;
     &:hover{
         text-decoration: underline;
     }
+}
+
+button{
+    outline: none;
 }
 
 .errorMessage{
