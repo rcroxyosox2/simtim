@@ -11,18 +11,17 @@ class LineGraph extends React.Component{
         let elm = e.target;
         elm.classList.remove('blink');
     }
+
+    // TODO: needs to be tap
     handleTouchstart(e) {
-
-        let path = this.props.location.pathname;
-        let [parent, subview] = path.substring(1).split("/"); 
-
-
-        if(parent != "chart") {
-            this.props.history.push("/chart");
-        }
-
         let elm = e.target;
+
         elm.classList.add('blink');
+        this.props.handleTouchStart && this.props.handleTouchStart(e);
+    }
+
+    componentDidUpdate() {
+        this.selectedIndex = null;
     }
 
     componentWillUnmount() {
@@ -32,29 +31,10 @@ class LineGraph extends React.Component{
     render(){
         const MAIN_MARGINS = 45;
 
-        // if (this.props.delayRedraw) {
-
-        //     let interval;
-
-        //     window.setTimeout(() => {
-        //         window.clearInterval(interval);
-        //     }, 600);
-
-        //     interval = setInterval(() => {
-        //         var evt = new UIEvent('resize'); 
-        //         window.dispatchEvent(evt);
-        //     }, 10);
-        // }
-
-
         const data = this.props.data; 
-        // {
-        //     labels: this.props.labels,
-        //     series: this.props.data
-        // };
 
         const options = {
-            fullWidth: true,
+            fullWidth: (data.labels.length < 5),
             showPoint: true,
             lineSmooth: chartist.Interpolation.simple({
                 divisor: 2,
@@ -87,6 +67,10 @@ class LineGraph extends React.Component{
                     let s  = parseInt(w / (f*c)); // how many can fit in the window
                     let m = parseInt(label.length / s) // get a modulus
                     let ml = 2; // but make sure its not too small
+
+                    if(data.labels.length < 4) {
+                        return value;
+                    }
 
                     return ((i % Math.max(m,ml) == 0)) ? value : null;
                     // return value;
@@ -139,6 +123,7 @@ class LineGraph extends React.Component{
                     const outerW = parentSVG.clientWidth;
                     const outerH = parentSVG.clientHeight;
                     const w = (data.element.parent().root().getNode().clientWidth - (options.chartPadding.left * 2)) / this.props.data.labels.length;
+                    const timeStamp = this.props.data.labelDateStamps[data.index];
 
                     let s = new chartist.Svg('rect', {
                         'x': (data.x - (w/2)),
@@ -148,12 +133,45 @@ class LineGraph extends React.Component{
                         // 'stroke-width': 1,
                         width: w,
                         height: outerH,
+                        'data-timestamp': timeStamp,
+                        'data-index': data.index,
                         'class': 'clickablePointTarget'
                     });
 
                     s.getNode().style.marginLeft = 20;
-                    
                     data.element.parent().append(s)
+
+                    let ly2 = outerH;
+
+                    if(options.chartPadding && options.chartPadding.bottom) { 
+                        ly2 -= options.chartPadding.bottom;
+                    }
+
+                    if(options.axisX && options.axisX.labelOffset) {
+                        ly2 -= options.axisX.labelOffset.y;
+                    }
+                    
+
+                    let lc = ['linePopover'];
+
+                    let l = new chartist.Svg('line', {
+                        'x1': (data.x),
+                        'x2': (data.x),
+                        'y1': 0,
+                        'y2': ly2,
+                        'stroke-width': 1,
+                        'data-index': data.index,
+                        'class': lc.join(" ")
+                    })
+
+                    data.element.parent().append(l);
+
+                    if(this.props.selectedIndex && this.props.selectedIndex == data.index){
+                        setTimeout(() => {
+                            l.getNode().classList.add('in');
+                        }, 100);
+                    }
+
                 }
 
                 if(data.type === 'label') {
@@ -165,17 +183,23 @@ class LineGraph extends React.Component{
                     let c = span.innerText.length; // length of the string
                     let calcW = (f*8);
                     let ll = this.props.data.labels.length;
-                    let onLast = (data.index == ll-1);
+                    let onLast = (data.index === ll-1);
+                    let onFirst = (data.index === 0);
                     let newW = calcW; //(bigW) ? bigW : data.width;
                     data.element.attr({ 
                         width: newW 
                     });
 
                     span.style.width = `${newW}px`;
-
-                    if(onLast && (ll == 3)) {
-                        span.style.textAlign = "right";
-                        span.style.marginLeft = "-"+newW+"px";
+                    if(ll < 4) {
+                        if(onLast && ll > 1){
+                            span.style.textAlign = "right";
+                            span.style.marginLeft = "-"+newW+"px";
+                        }
+                        else if(onFirst && ll > 1){
+                            span.style.textAlign = "left";
+                            span.style.marginLeft = 0;
+                        }
                     }
                     else if(2 % ll == 0) {
                         span.style.marginLeft = "-50%";

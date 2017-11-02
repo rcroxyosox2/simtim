@@ -1,0 +1,27 @@
+@import "base";
+
+
+.HomeGraphFilter{
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    box-sizing: border-box;
+    @include transition($homeServicesExpand);
+        &.HomeGraphFilter-enter {
+            opacity: 0.01;
+        }
+    
+        &.HomeGraphFilter-enter.HomeGraphFilter-enter-active {
+            opacity: 1;
+            @include transition(all 250ms ease-in);
+        }
+    
+        &.HomeGraphFilter-leave {
+            opacity: 1;
+        }
+    
+        &.HomeGraphFilter-leave.HomeGraphFilter-leave-active {
+            opacity: 0.01;
+            @include transition(all 250ms ease-in);
+        }   
+}

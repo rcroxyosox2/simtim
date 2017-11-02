@@ -1,0 +1,32 @@
+@import "base";
+
+.ButtonGroup{
+    $c: $gray2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $buttonGroupMargins;
+    .buttonGroupContainer{
+        flex: 1;
+        max-height: $buttonGroupHeight;
+        max-width: 85%;
+        display: flex;
+        border: 1px solid green;
+        height: $buttonGroupCalculatedHeight;
+        border: 1px solid $buttonGroupBorderColor;
+        @include border-radius($buttonBorderRadius);
+        button{
+            border-right: 1px solid $buttonGroupBorderColor;
+            flex: 1;
+            padding: 6px;
+            &:last-child{
+                border-right: none
+            }
+            &.selected{
+                background: $buttonGroupBorderColor;
+                color: $buttonGroupTextColor;
+            }
+        }
+    }
+}

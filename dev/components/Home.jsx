@@ -16,7 +16,7 @@ import Style from "../scss/Home.scss";
 class Home extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {activeItem: null};
+        this.state = {activeItem: null, filteredTimestamp: null};
     }
 
     listenScrollEvent(e) {
@@ -55,6 +55,19 @@ class Home extends React.Component{
 
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleKeyDown.bind(this));
+    }
+
+    graphPointTouchStart(stamp) {
+        this.setState({filteredTimestamp: stamp})
+    }
+
+    paddingAdusted(top) {
+        let domElm = ReactDOM.findDOMNode(this.chartSubViewElm);
+        domElm.style.top = `${top}px`;
+    }
+
+    componentWillReceiveProps() {
+        this.setState({filteredTimestamp: null});
     }
 
     render(){
@@ -111,7 +124,6 @@ class Home extends React.Component{
                             modeMapClass = CHART_MODE+"Mode";
                         }
 
-
                         let className = `Home ${modeMapClass}`
 
                         const ChartSubView = (parent === CHART_MODE) ? HomeLineGraphToggleSettings : null;
@@ -129,10 +141,14 @@ class Home extends React.Component{
                                             transitionEnterTimeout={300}
                                             transitionLeaveTimeout={300}
                                         >
-                                        {ChartSubView && <ChartSubView key="1" />}
+                                        {ChartSubView && <ChartSubView key="1" ref={(elm) => {this.chartSubViewElm = elm}} />}
                                         </CSSTransitionGroup>
                                     </div>
-                                    <HomeLineGraph {...this.props} ref={elm=>{this.homeLineGraph = ReactDOM.findDOMNode(elm)}} />
+                                    <HomeLineGraph {...this.props} 
+                                        ref={elm=>{this.homeLineGraph = ReactDOM.findDOMNode(elm)}} 
+                                        graphPointTouchStart={this.graphPointTouchStart.bind(this)} 
+                                        paddingAdusted={this.paddingAdusted.bind(this)}
+                                        filteredTimestamp={this.state.filteredTimestamp} />
                                     {servicesHtml}
                                 </div>
                         </div>

@@ -18,15 +18,25 @@ height: 100%;
         }
     }
 
-    .ct-series.symptom .ct-point, .ct-series.symptom .ct-line{
+    .linePopover{
+        @include transform(scaleY(0));
+        @include transition(all 300ms ease-in-out);
+        stroke: transparent;
+        &.in{
+            @include transform(scaleY(1));
+            stroke: $gray2;
+        }
+    }
+
+    .ct-series.SYMPTOM .ct-point, .ct-series.SYMPTOM .ct-line{
         stroke: $symptomColor;
     }
 
-    .ct-series.sleep .ct-point, .ct-series.sleep .ct-line{
+    .ct-series.SLEEP .ct-point, .ct-series.SLEEP .ct-line{
         stroke: $sleepColor;
     }
 
-    .ct-series.excercise .ct-point, .ct-series.excercise .ct-line{
+    .ct-series.EXCERCISE .ct-point, .ct-series.EXCERCISE .ct-line{
         stroke: $excerciseColor;
     }
 

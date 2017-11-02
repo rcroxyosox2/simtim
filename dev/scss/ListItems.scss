@@ -1,0 +1,35 @@
+@import "base";
+
+
+.ListItems{
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    > li{
+        display: flex;
+        list-style: none;
+        padding: 8px $defaultMarginsLeftRight;
+        &.SLEEP{
+            background-color: $sleepColor;
+        }
+        &.SYMPTOM{
+            background-color: $symptomColor;
+        }
+        &.EVENT{
+            background-color: $eventColor;
+        }
+        &.EXCERCISE{
+            background-color: $excerciseColor;
+        }
+        > span{
+            &:first-child{
+                flex:1;
+                margin-right: 5px;
+                font-size: 11px;
+            }
+            &:last-child{
+                flex: 3;
+            }
+        }
+    }
+}

@@ -7,7 +7,7 @@ class SleepAdd extends React.Component{
         const db = this.props.fire.database();
         const auth = this.props.fire.auth();
         const hours = this.hours.value;
-        const date = moment(this.date.value, 'YYYY-MM-DD').valueOf();
+        const date = moment(parseInt(this.date.value), 'YYYY-MM-DD').valueOf();
         const note = this.note.value;
 
         const data = {hours, date, note}

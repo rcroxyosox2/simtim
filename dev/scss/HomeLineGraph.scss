@@ -15,8 +15,53 @@
         // opacity: 0;
         // flex: 0;
     }
+
+    .transitioningContentHomeDataList{
+        position: absolute;
+        top: -$buttonGroupCalculatedHeight - $buttonGroupTopMargin + $buttonGroupMargins;
+        left: 0;
+        @include size(100%, auto);
+        z-index: 2;
+        .dataListContainer{
+
+            $borderColor: $gray5;
+
+            > header{
+                background: $borderColor;
+                padding: 10px $defaultMarginsLeftRight;
+            }
+            > .ListItems{
+                max-height: 120px;
+                overflow: scroll;
+            }
+            border-bottom: 5px solid $borderColor;
+
+            &.HomeDataList-enter {
+                opacity: 0.01;
+                @include translateY(-100%);
+            }
+        
+            &.HomeDataList-enter.HomeDataList-enter-active {
+                opacity: 1;
+                @include translateY(0);
+                @include transition(all 300ms ease-in-out);
+            }
+        
+            &.HomeDataList-leave {
+                opacity: 1;
+                @include translateY(0);
+            }
+        
+            &.HomeDataList-leave.HomeDataList-leave-active {
+                opacity: 0.01;
+                @include translateY(-100%);
+                @include transition(all 300ms ease-in-out);
+            }   
+        }
+    }
+
     .HomeGraphFilter {
-        top: -($buttonGroupCalculatedHeight+$buttonGroupTopMargin);
+        top: -($buttonGroupCalculatedHeight + $buttonGroupTopMargin - $buttonGroupMargins);
         .ButtonGroup{
             padding-top: $buttonGroupTopMargin;
         }
@@ -24,6 +69,8 @@
 
     .LineGraph{
         flex: 1;
+        position: relative;
+        @include transition($homeServicesExpand);
     }
 
     &:before{
@@ -41,7 +88,7 @@
     }
 
     .chartMode #mainContent &{
-        top: ($mainHeaderHeight + $buttonGroupCalculatedHeight);
+        top: ($mainHeaderHeight + $buttonGroupCalculatedHeight + $buttonGroupTopMargin - $buttonGroupMargins);
         &:before{
             opacity: 0;
             bottom: -100%;

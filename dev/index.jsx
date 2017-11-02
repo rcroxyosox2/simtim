@@ -71,6 +71,9 @@ export default class Index extends React.Component {
                         <Route exact path="/chart" render={
                             (props) => { return <Home fire={this.fire} {...props} />; }
                         }></Route>
+                        <Route exact path="/chart/*" render={
+                            (props) => { return <Home fire={this.fire} {...props} />; }
+                        }></Route>
                         <Route exact path="/symptom" render={
                             (props) => { return <Redirect to="/symptom/add" />; }
                         }></Route>

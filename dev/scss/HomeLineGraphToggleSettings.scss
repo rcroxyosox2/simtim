@@ -5,7 +5,7 @@
     position: relative;
     box-sizing: border-box;
     padding: ($expandedChartSize+$buttonGroupCalculatedHeight) $defaultMarginsLeftRight $defaultMarginsLeftRight*2;
-
+    
     .chartMode #mainContent &{
         z-index: 3;
     }
